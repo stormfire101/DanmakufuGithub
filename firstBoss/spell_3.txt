@@ -1,0 +1,316 @@
+#TouhouDanmakufu[Single]
+#System["C:/Users/Matt/Documents/th_dnh_ph3/script/firstBoss/system/New_System.txt"]
+#Background["script/firstBoss/system/Default_Background_IceMountain.txt"]
+#ScriptVersion[3]
+#Title["spell3"]
+#Text["spell3"]
+#BGM["./necrofantasia.ogg"]
+#include "script/default_system/Default_ShotConst.txt"
+#include "script/Stellar FX/Stellar.dnh"
+let objBoss;
+//let imgpath = GetCurrentScriptDirectory() ~ "./New_Background.png";
+let objScene=GetEnemyBossSceneObjectID();
+let imgBoss = GetCurrentScriptDirectory ~ "./dot_komachi.png";
+let objBossState=0;
+let state=0;
+let animFrame = 0;
+let total=0;
+let imgpath = GetCurrentScriptDirectory() ~ "./IWarnedYou.png";
+//let pos = ObjPrim_Create(OBJ_SPRITE_2D());
+let left = ObjPrim_Create(OBJ_SPRITE_2D());
+let right = ObjPrim_Create(OBJ_SPRITE_2D());
+//18,3.5
+@Event{
+    alternative(GetEventType())
+    case(EV_REQUEST_LIFE){
+        SetScriptResult(6000);
+    }
+    case(EV_REQUEST_TIMER){
+        SetScriptResult(60);
+    }
+    case(EV_REQUEST_SPELL_SCORE){
+        SetScriptResult(1000000);
+    }
+}
+@Initialize{
+    objBoss = ObjEnemy_Create(OBJ_ENEMY_BOSS);
+    ObjEnemy_Regist(objBoss);
+    ObjMove_SetDestAtFrame(objBoss, GetCenterX, 60, 60);
+    ObjEnemyBossScene_StartSpell(objScene);
+    TDrawLoop;
+    TFinalize;
+    MainTask;
+}
+@MainLoop{
+    ObjEnemy_SetIntersectionCircleToShot(objBoss, ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 32); 
+    ObjEnemy_SetIntersectionCircleToPlayer(objBoss, ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 24);
+    yield;
+}
+task MainTask{
+	//SetStgFrame(32,16, 416, 464, 20, 80);
+      wait(120);//100 
+		Stellar_Init();
+		Stellar_Charge(objBoss,30,0.2,BLEND_ALPHA,360);
+		//Stellar_MagicCircle(objBoss,1,100,0.5,1,3,BLEND_ALPHA,200,125,240);
+		//Stellar_MagicCircle(object,scale,fadetime,pulseamount,pulsespeed,angvel,blending,hue,saturation,alpha)
+		//sycthe;
+		attack;
+		//wait(10);
+		let obj = CreateStraightLaserA1(ObjMove_GetX(objBoss),ObjMove_GetY(objBoss),90,GetScreenHeight()+20,50,80,DS_BEAM_PURPLE,80);///time on screen 80*2
+		
+		wait(130);
+	  //WriteLog(GetScreenWidth);156  296 140
+	  ascent( i in 0..22){//32, 16, 416, 464, 20, 80
+		  SetStgFrame(32+i*6,16, 416-i*6, 464, 20, 80);
+		  ObjMove_SetDestAtFrame(objBoss,GetCenterX,ObjMove_GetY(objBoss),1);
+		  ObjMove_SetDestAtFrame(obj,GetCenterX,ObjMove_GetY(objBoss),1);
+		  ObjMove_SetX(GetPlayerObjectID(),GetPlayerX()-6);
+		  //WriteLog(GetCenterX);
+		  //ObjMove_SetX(objBoss,ObjMove_GetX(objBoss)-6);
+		  //ObjMove_SetX(obj,ObjMove_GetX(objBoss)-6);
+		  yield;
+	  }
+	  
+	  coercion;
+	  wait(50);
+	  Sanzu;
+		/*loop{
+			if(total=>3){
+				detonate;
+			}
+			yield;
+		}*/
+}
+function attack(){
+	state=1;
+	animFrame=0;
+}
+task coercion{
+	let dir=1;
+	let den=5;
+	loop{
+		loop(1){
+			loop(2){
+				ascent(i in 0..3){
+					ascent(n in 0..den){
+						CreateShotA1((70-70*dir)+((140/den)*n)*dir+i*2*dir, ObjMove_GetY(objBoss)-n^2,1.3+i/4,90,DS_COIN_RED+i,10);
+						yield;
+					}
+					wait(5);
+				}
+				wait(50);
+			}
+			dir=dir*-1;
+			wait(50);
+		}
+		aim;
+		wait(50);
+	}
+}
+task aim(){
+	let aim=GetAngleToPlayer(objBoss);
+	let obj=CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss),1.5,aim,DS_BALL_M_A_PURPLE,20);
+	
+	let hold=0;
+	//wait(20);
+	//loop{
+	snake(obj,aim);
+	while(ObjMove_GetY(obj)<GetPlayerY){yield;}
+	//ObjMove_SetSpeed(obj,0);
+	let obj2=CreateShotA1(ObjMove_GetX(obj), ObjMove_GetY(obj),0,aim,DS_BALL_M_A_PURPLE,5);
+	//let obj2 = CreateLooseLaserA1(ObjMove_GetX(obj), ObjMove_GetY(obj),0,aim,50,50,DS_BALL_M_A_PURPLE,5);
+	Obj_Delete(obj);
+	total++;
+	warn(obj2);
+	
+	
+	//ObjShot_SetSpellResist(obj2,true);
+}
+function snake(obj,aim){
+	let wvel = 1.5;
+	ascent(i in 0..8){
+		//hold=
+		ObjMove_AddPatternA2(obj, i*34, 2.2, aim, 0, wvel, 1.5);
+		//ObjMove_AddPatternA3(obj,10,NO_CHANGE,NO_CHANGE,NO_CHANGE,NO_CHANGE,NO_CHANGE,NO_CHANGE);
+		wvel*=-1;
+	}
+}
+task warn(obj){
+let warn = ObjPrim_Create(OBJ_SPRITE_2D());
+	ObjPrim_SetTexture(warn,imgpath);
+        ObjSprite2D_SetSourceRect(warn, 0, 0, 62, 62); //alternatively, 0, 0, 384, 448
+        ObjSprite2D_SetDestRect(warn, 0, 0, 62, 62);
+        ObjRender_SetPosition(warn,ObjMove_GetX(obj),ObjMove_GetY(obj), 1); //move it to the top left corner of the screen
+		ObjSprite2D_SetDestCenter(warn);
+		ObjRender_SetBlendType(warn, BLEND_ALPHA);
+		ObjRender_SetAlpha(warn,150);
+		while(total<3){if(Obj_IsDeleted(obj)){Obj_Delete(warn);return;}yield;}
+		//Stellar_Explosion(obj,10,0.3,BLEND_ALPHA,255);
+		ObjShot_SetDelay(obj,20);
+		wait(20);
+		ObjMove_AddPatternA3(obj,0,0,0,0,0,0,DS_BALL_L_PURPLE);
+		Obj_Delete(warn);
+		wait(5);
+		total=0;
+		wait(40);
+		Obj_Delete(obj);
+		
+}
+task Sanzu{
+	let hold=0;
+	//let speed =1;
+	let count=0;
+	//CreateShotA2(70,0,4,GetAngleToPlayer(objBoss),0.002,2.5,DS_SCALE_A_BLUE,10);
+	loop{
+		//ascent(n in 0..6){
+			wait(14);
+			//loop(10){
+				
+					//hold=(round(rand(0,20)*7));
+					
+					//hold=(rand(0,10));
+					ascent(i in -2..3){
+						hold=cos((count+i*5)*4)*70+70;
+					let obj = CreateShotA2(hold,0,0,90,0,5,DS_SCALE_A_BLUE,5);
+					
+					//let obj = CreateShotA2(hold,0,0,90,0,5,DS_SCALE_A_BLUE,5);
+					
+					
+					ObjRender_SetBlendType(obj,BLEND_ALPHA);
+					ObjMove_SetDestAtSpeed(obj,cos((count+i*10)*4)*70+70,GetScreenHeight,((hold-70)/50)^2+2.2);
+					
+					
+					}
+				
+			count++;
+	}
+}
+function points{
+	
+}
+task sycthe{
+	CreateStraightLaserA1(ObjMove_GetX(objBoss),ObjMove_GetY(objBoss),90,GetScreenHeight()+20,50,50,DS_BEAM_PURPLE,50);
+	
+}
+
+function spirit(x,y){//DS_BALL_BS_PURPLE  DS_BALL_S_PURPLE	
+	
+}
+task shoot(time,obj,dir){
+	let hold = GetStgFrameWidth()/2;
+		wait(500-time-10);
+		ObjShot_SetDelay(obj,10);
+		wait(10);
+		//ObjMove_SetDestAtFrame(left,x,ObjMove_GetY(left),40);
+		ObjMove_SetDestAtFrame(obj,hold+hold*dir,rand(ObjMove_GetY(obj)-5,ObjMove_GetY(obj)+5),60);
+		ObjShot_SetDeleteFrame(obj,65);
+		//wait(40);
+		//ObjMove_SetSpeed(obj,2);
+}
+
+function simp(i){
+	if(i>=360){
+		return (i-360);
+	}else if(i<0){
+		return (i+360);
+	}else{
+		return i;
+	}
+}
+
+task movement{
+    while(ObjEnemy_GetInfo(objBoss, INFO_LIFE) > 0){
+        let x=rand(GetCenterX + 90, GetCenterX - 90);
+		let y= rand(GetCenterY - 60, GetCenterY - 120);
+		let hold=ObjPrim_Create(OBJ_SPRITE_2D());
+		ObjRender_SetX(hold,x);
+        ObjRender_SetY(hold,y);
+		ObjMove_SetDestAtFrame(objBoss,x,y,GetObjectDistance(objBoss,hold)/rand(1.5,2));
+        wait(240);
+    }
+}
+task TDrawLoop {
+   		//125 width	256 height
+	
+	let animFrame2 = 0;
+	let dir;
+	let speed; 
+		// texture the boss, set centre as true centre.
+	ObjPrim_SetTexture(objBoss,imgBoss);
+	ObjSprite2D_SetSourceRect(objBoss,0,0,128,128);
+	ObjSprite2D_SetDestCenter(objBoss);
+		//ObjRender_SetScaleXYZ(objBoss,1.0,1.0,0);
+	
+	while(!Obj_IsDeleted(objBoss)) {
+	
+		// update boss speed/dir locally
+		dir = ObjMove_GetAngle(objBoss);
+		speed = ObjMove_GetSpeed(objBoss);
+		
+		// animation handling
+		//alternative(objBossState)
+		if(state==0){
+		if(speed == 0){ 
+		//alternative(objBossState)
+		//case(0){
+			ObjRender_SetAngleXYZ(objBoss,0,0,0);
+			ObjSprite2D_SetSourceRect(objBoss,0,0,128,128);
+			if(animFrame < 15) { ObjSprite2D_SetSourceRect(objBoss,0,0,128,128);}
+			if(animFrame >= 15 && animFrame < 30) { ObjSprite2D_SetSourceRect(objBoss,0,128,128,128*2);}
+			if(animFrame >= 30 && animFrame < 45) { ObjSprite2D_SetSourceRect(objBoss,0,128*2,128,128*3);}
+			//if(animFrame >= 45) { ObjSprite2D_SetSourceRect(objBoss,0,128*3,128,128*4); WriteLog(4);}
+			animFrame2 = 0;
+		//}
+		}
+		else if(cos(dir) < 0){ 
+		//WriteLog(1);
+			//ObjRender_SetAngleXYZ(objBoss,0,180,0);	// flip vertical
+			if(animFrame2 < 15) { ObjSprite2D_SetSourceRect(objBoss,128*3,128*3,128*4,128*4); }
+			if(animFrame2 >= 15 && animFrame2 <= 45) { ObjSprite2D_SetSourceRect(objBoss,128*3,128*4,128*4,128*5); }
+			//if(animFrame2 >= 30 && animFrame2 < 45) { ObjSprite2D_SetSourceRect(objBoss,128,64,192,128); }
+			//if(animFrame2 >= 45) { ObjSprite2D_SetSourceRect(objBoss,192,64,256,128); }
+		}
+		else if(cos(dir) > 0){ 
+		//WriteLog(0);
+			ObjRender_SetAngleXYZ(objBoss,0,180,0);	// flip vertical
+			if(animFrame2 < 15) { ObjSprite2D_SetSourceRect(objBoss,128*3,128*3,128*4,128*4); }
+			if(animFrame2 >= 15 && animFrame2 <= 45) { ObjSprite2D_SetSourceRect(objBoss,128*3,128*4,128*4,128*5); }
+			//if(animFrame2 >= 30 && animFrame2 < 45) { ObjSprite2D_SetSourceRect(objBoss,128,128,192,192); }
+			//if(animFrame2 >= 45) { ObjSprite2D_SetSourceRect(objBoss,192,128,256,192); }  
+		}
+		if(animFrame > 60) { animFrame = 0; }	// reset animFrame when it is higher than 60.
+		}else{
+			if(animFrame < 15) { ObjSprite2D_SetSourceRect(objBoss,128*5,0,128*6,128);}
+			if(animFrame >= 15 && animFrame < 50) { ObjSprite2D_SetSourceRect(objBoss,128*5,128,128*6,128*2);}
+			if(animFrame >= 50 && animFrame < 65) { ObjSprite2D_SetSourceRect(objBoss,128*5,128*2,128*6,128*3);}
+			if(animFrame >= 65 && animFrame < 120) { ObjSprite2D_SetSourceRect(objBoss,128*5,128*3,128*6,128*4);}
+			//if(animFrame >= 45) { ObjSprite2D_SetSourceRect(objBoss,0,128*3,128,128*4); WriteLog(4);}//290
+			if(animFrame > 120) { animFrame = 0;state=0; }
+		}
+		animFrame++;		// count animFrame. (++ is +1)
+		animFrame2+=2;		// count animFrame2.
+		
+		yield;
+	}
+}
+task TFinalize {
+    while(ObjEnemy_GetInfo(objBoss, INFO_LIFE) > 0){yield;}
+    if(ObjEnemyBossScene_GetInfo(objScene, INFO_PLAYER_SHOOTDOWN_COUNT)
+            +ObjEnemyBossScene_GetInfo(objScene, INFO_PLAYER_SPELL_COUNT) == 0){
+        AddScore(ObjEnemyBossScene_GetInfo(objScene, INFO_SPELL_SCORE));
+    }
+    Obj_Delete(objBoss);
+    DeleteShotAll(TYPE_ALL, TYPE_IMMEDIATE);
+    SetAutoDeleteObject(true);
+    CloseScript(GetOwnScriptID());
+    return;
+}
+function GetCenterX(){
+    return GetStgFrameWidth() / 2;
+}
+function GetCenterY(){
+    return GetStgFrameHeight() / 2;
+}
+function wait(n){
+    loop(n){yield;}
+}

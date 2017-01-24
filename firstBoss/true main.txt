@@ -1,0 +1,567 @@
+#TouhouDanmakufu[Plural]
+#System["C:/Users/Matt/Documents/th_dnh_ph3/script/firstBoss/system/New_System.txt"]
+#Background["script/firstBoss/system/Default_Background_IceMountain.txt"]
+
+#ScriptVersion[3]
+#Title["My First Boss Script"]
+#Text["boss script"] 
+@Event{
+}
+@Initialize{
+    TPlural;
+}
+@MainLoop{
+    yield;
+}
+task TPlural{
+    let dir = GetCurrentScriptDirectory();
+    let obj = ObjEnemyBossScene_Create();
+    ObjEnemyBossScene_Add(obj, 0, dir ~ "./nonSpell_1.txt");
+	ObjEnemyBossScene_Add(obj, 0, dir ~ "./nonSpell_2.txt");
+    ObjEnemyBossScene_Add(obj, 0, dir ~ "./spell_1.txt");
+    ObjEnemyBossScene_Add(obj, 0, dir ~ "./spell_2.txt");
+    ObjEnemyBossScene_Add(obj, 0, dir ~ "./spell_3.txt");
+
+	
+    ObjEnemyBossScene_LoadInThread(obj);
+    ObjEnemyBossScene_Regist(obj);
+    while(!Obj_IsDeleted(obj)){
+        yield;
+    }
+    CloseScript(GetOwnScriptID());
+}
+/*
+Move Object Functions
+Functions used to control object movement. The AddPattern functions also serve as replacements for the CreateShotA system used in 0.12m.
+
+Contents [hide] 
+1 ObjMove_SetX
+2 ObjMove_SetY
+3 ObjMove_SetPosition
+4 ObjMove_SetSpeed
+5 ObjMove_SetAngle
+6 ObjMove_SetAcceleration
+7 ObjMove_SetMaxSpeed
+8 ObjMove_SetAngularVelocity
+9 ObjMove_SetDestAtSpeed
+10 ObjMove_SetDestAtFrame
+11 ObjMove_SetDestAtWeight
+12 ObjMove_AddPatternA1
+13 ObjMove_AddPatternA2
+14 ObjMove_AddPatternA3
+15 ObjMove_AddPatternA4
+16 ObjMove_AddPatternB1
+17 ObjMove_AddPatternB2
+18 ObjMove_AddPatternB3
+19 ObjMove_GetX
+20 ObjMove_GetY
+21 ObjMove_GetSpeed
+22 ObjMove_GetAngle
+ObjMove_SetX
+Arguments:
+ 1) object ID (real)
+ 2) x coordinate (real)
+Sets the x coordinate of the specified object.
+
+ObjMove_SetY
+Arguments:
+ 1) object ID (real)
+ 2) y coordinate (real)
+Sets the y coordinate of the specified object.
+
+ObjMove_SetPosition
+Arguments:
+ 1) object ID (real)
+ 2) x coordinate (real)
+ 3) y coordinate (real)
+Sets the x and y of the specified object.
+
+ObjMove_SetSpeed
+Arguments:
+ 1) object ID (real)
+ 2) speed (real)
+Sets the movement speed per frame for the object.
+
+ObjMove_SetAngle
+Arguments:
+ 1) object ID (real)
+ 2) angle (real)
+Sets the movement angle for the object.
+
+ObjMove_SetAcceleration
+Arguments:
+ 1) object ID (real)
+ 2) acceleration (real)
+Sets the movement acceleration per frame for the object.
+
+ObjMove_SetMaxSpeed
+Arguments:
+ 1) object ID (real)
+ 2) speed (real)
+Sets the maximum/minimum speed which the object will approach using the ObjMove_SetAcceleration function.
+
+ObjMove_SetAngularVelocity
+Arguments:
+ 1) object ID (real)
+ 2) angular velocity (real)
+Sets the change in movement angle per frame for the object.
+
+ObjMove_SetDestAtSpeed
+Arguments:
+ 1) object ID (real)
+ 2) x coordinate (real)
+ 3) y coordinate (real)
+ 4) velocity (real)
+Moves the object towards the given coordinates at the speed specified.
+
+ObjMove_SetDestAtFrame
+Arguments:
+ 1) object ID (real)
+ 2) x coordinate (real)
+ 3) y coordinate (real)
+ 4) frames (real)
+Moves the object towards the given coordinates in the number of frames specified.
+
+ObjMove_SetDestAtWeight
+Arguments:
+ 1) object ID (real)
+ 2) x coordinate (real)
+ 3) y coordinate (real)
+ 4) weight (real)
+ 5) max speed (real)
+Moves the object towards the given coordinates. It will slow down near the end of the movement based on the weight specified.
+
+ObjMove_AddPatternA1
+Arguments:
+ 1) object ID (real)
+ 2) frame (real)
+ 3) speed (real)
+ 4) angle (real)
+After the specified number of frames, changes the speed and angle of the object. NO_CHANGE can be used to preserve the original speed or angle.
+
+ObjMove_AddPatternA2
+Arguments:
+ 1) object ID (real)
+ 2) frame (real)
+ 3) speed (real)
+ 4) angle (real)
+ 5) acceleration (real)
+ 6) angular velocity (real)
+ 7) max speed (real)
+Similar to ObjMove_AddPatternA1. Can change object acceleration, angular velocity, and maximum speed. NO_CHANGE can also be used for these new parameters.
+
+ObjMove_AddPatternA3
+Arguments:
+ 1) object ID (real)
+ 2) frame (real)
+ 3) speed (real)
+ 4) angle (real)
+ 5) acceleration (real)
+ 6) angular velocity (real)
+ 7) max speed (real)
+ 8) bullet graphic (real)
+Similar to ObjMove_AddPatternA2. Changes the bullet graphic. (Similar to SetShotDataA, but with acceleration and angular velocity swapped)
+
+ObjMove_AddPatternA4
+Arguments:
+ 1) object ID (real)
+ 2) frame (real)
+ 3) speed (real)
+ 4) angle (real)
+ 5) acceleration (real)
+ 6) angular velocity (real)
+ 7) max speed (real)
+ 8) target ID (real)
+ 9) bullet graphic (real)
+Similar to ObjMove_AddPatternA3. The angle parameter is relative to the angle from the object to the target. For example, if GetPlayerObjectID is used as the target, an angle of 0 will cause the object to aim for the player. (Replaces SetShotDirectionType)
+
+ObjMove_AddPatternB1
+Arguments:
+ 1) object ID (real)
+ 2) frame (real)
+ 3) x speed (real)
+ 4) y speed (real)
+After the specified number of frames, changes the x and y movement speeds of the object. NO_CHANGE can be used to preserve the original speeds.
+
+ObjMove_AddPatternB2
+Arguments:
+ 1) object ID (real)
+ 2) frame (real)
+ 3) x speed (real)
+ 4) y speed (real)
+ 5) x acceleration (real)
+ 6) y acceleration (real)
+ 7) x max speed (real)
+ 8) y max speed (real)
+Similar to ObjMove_AddPatternB1. Can change object x/y acceleration and x/y maximum speed. NO_CHANGE can also be used for these new parameters.
+
+ObjMove_AddPatternB3
+Arguments:
+ 1) object ID (real)
+ 2) frame (real)
+ 3) x speed (real)
+ 4) y speed (real)
+ 5) x acceleration (real)
+ 6) y acceleration (real)
+ 7) x max speed (real)
+ 8) y max speed (real)
+ 9) bullet graphic (real)
+Similar to ObjMove_AddPatternB2. Can also change the bullet graphic. (Replaces SetShotDataA_XY)
+
+ObjMove_GetX
+Arguments:
+ 1) object ID (real)
+Returns the x coordinate of the object.
+
+ObjMove_GetY
+Arguments:
+ 1) object ID (real)
+Returns the y coordinate of the object.
+
+ObjMove_GetSpeed
+Arguments:
+ 1) object ID (real)
+Returns the movement speed of the object.
+
+ObjMove_GetAngle
+Arguments:
+ 1) object ID (real)
+Returns the movement angle of the object.
+
+Category: Danmakufu ph3
+Navigation menu
+Create accountLog inPageDiscussionReadView sourceView history
+
+Search
+Go
+Main page
+Recent changes
+FAQ
+IRC channel
+Communities
+Links
+Danmakufu Ph3
+About
+Functions
+Tutorials
+Danmakufu 0.12m
+About
+Functions
+Tutorials
+Tools
+What links here
+Related changes
+Special pages
+Printable version
+Permanent link
+Page information
+This page was last modified on 26 June 2014, at 21:20.
+Privacy policyAbout Danmakufu WikiDisclaimersPowered by MediaWiki*/
+
+/*
+Shot Functions
+Contents [hide] 
+1 DeleteShotAll
+2 DeleteShotInCircle
+3 CreateShotA1
+4 CreateShotA2
+5 CreateShotOA1
+6 CreateShotB1
+7 CreateShotB2
+8 CreateShotOB1
+9 CreateLooseLaserA1
+10 CreateStraightLaserA1
+11 CreateCurveLaserA1
+12 SetShotIntersectionCircle
+13 SetShotIntersectionLine
+14 GetShotIdInCircleA1
+15 GetShotIdInCircleA2
+16 GetShotCount
+17 SetShotAutoDeleteClip
+18 GetShotDataInfoA1
+19 StartShotScript
+DeleteShotAll
+Arguments:
+    1) type
+         TYPE_ALL
+         TYPE_SHOT
+         TYPE_CHILD
+    2) delete type
+         TYPE_IMMEDIATE
+         TYPE_FADE
+         TYPE_ITEM
+Deletes all shot objects on screen matching the criteria. TYPE_ALL will clear all shot objects, TYPE_SHOT will clear only shot objects without spell resistance, and TYPE_CHILD will clear shot objects fired from the currently running script (e.g. a stage script that spawns enemies, putting CHILD in one of the enemy's script will clear only that enemy's bullets). The second type determines how the bullet will be deleted. TYPE_IMMEDIATE will immediately delete the bullets, TYPE_FADE will slowly fade out the bullets (note, they will still be visible while fading out, but they will not have any collision), and TYPE_ITEM will turn the bullets into items according to the running item script.
+
+DeleteShotInCircle
+Arguments:
+    1) type
+    2) delete type
+    3) x-coordinate
+    4) y-coordinate
+    5) radius
+Same as DeleteShotAll, except it will only clear bullets in a defined circle.
+
+
+CreateShotA1
+Arguments:
+    1) x-coordinate
+    2) y-coordinate
+    3) speed
+    4) angle
+    5) graphic
+    6) delay
+Returns:
+    Object ID
+Creates a basic bullet that will move in the angle and speed defined. Graphic is the image the bullet will have, while delay is the time in frames that the bullet will appear. During it's delay, there will be a cloud that appears where the bullet will spawn.
+
+Refer to this bullet list for built in bullet id names.
+
+Also note that CreateShot functions will return a void value in a player script if the player is unable to shoot.
+
+
+CreateShotA2
+Arguments:
+    1) x-coordinate
+    2) y-coordinate
+    3) speed
+    4) angle
+    5) acceleration
+    6) max speed
+    7) graphic
+    8) delay
+Returns:
+    Object ID
+Same as CreateShotA1, except you can define an acceleration and max speed for the bullet. The number defined for acceleration will be applied to the bullet per frame, so this will usually have low numbers such as 0.1. Negative values may be used, however, having a negative value on acceleration but a positive number on max speed (or vice versa) will result in the bullet spawning at max speed.
+
+
+CreateShotOA1
+Arguments:
+    1) Object ID
+    2) speed
+    3) angle
+    4) graphic
+    5) delay
+Returns:
+    Object ID
+Creates a bullet that will spawn on the coordinates of the given object id. The bullet and its arguments act the same as CreateShotA1.
+
+
+CreateShotB1
+Arguments:
+    1) x-coordinate
+    2) y-coordinate
+    3) x speed
+    4) y speed
+    5) graphic
+    6) delay
+Returns:
+    Object ID
+Same as CreateShotA1, except you can define separate x and y speeds for the bullet.
+
+
+CreateShotB2
+Arguments:
+    1) x-coordinate
+    2) y-coordinate
+    3) x speed
+    4) y speed
+    5) x acceleration
+    6) y acceleration
+    7) x max/min speed
+    8) y max/min speed
+    9) graphic
+    10) delay
+Returns:
+    Object ID
+Same as CreateShotB1, except you can define separate x and y accelerations, and corresponding max/min speeds.
+
+
+CreateShotOB1
+Arguments:
+    1) Object ID
+    2) x speed
+    3) y speed
+    4) graphic
+    5) delay
+Returns:
+    Object ID
+Creates a bullet that will spawn on the coordinates of the given object id. The bullet and its arguments act the same as CreateShotB1.
+
+
+CreateLooseLaserA1
+Arguments:
+    1) x-coordinate
+    2) y-coordinate
+    3) speed
+    4) angle
+    5) length
+    6) width
+    7) graphic
+    8) delay
+Return Value
+    Object ID
+Creates a laser that functions much like a bullet from CreateShotA1, but can be defined with a size. This could also be used to create larger bullets.
+
+
+CreateStraightLaserA1
+Arguments:
+    1) x-coordinate
+    2) y-coordinate
+    3) angle
+    4) length
+    5) width
+    6) delete time
+    7) graphic
+    8) delay
+Return Value
+    Object ID
+Creates a laser mounted on a position. The 'delete time' argument determines how many frames until the laser disappears. Delay will spawn a very thin laser that has no collision in order to give the player a warning.
+
+Having no delay while using this laser is not advisable, as they spawn at full size the moment the delay is over.
+
+
+CreateCurveLaserA1
+Arguments:
+    1) x-coordinate
+    2) y-coordinate
+    3) speed
+    4) angle
+    5) length
+    6) width
+    7) graphic
+    8) delay
+Return Value
+    Object ID
+Creates a laser that functions similarly to CreateLooseLaserA1, but can be altered with ObjMove_SetAngularVelocity to create a curving laser.
+
+This function is heavy to process, so having many of them on-screen is not recommended.
+
+
+SetShotIntersectionCircle
+Arguments:
+    1) x-coordinate
+    2) y-coordinate
+    3) radius
+Creates the specified circle that will check for collisions.
+
+The player dies when touching/entering the circle.
+
+
+SetShotIntersectionLine
+Arguments:
+    1) start point x-coordinate
+    2) start point y-coordinate
+    3) end point x-coordinate
+    4) end point y-coordinate
+    5) width
+Creates the specified line that will check for collisions.
+
+The player dies when touching the line.
+
+
+GetShotIdInCircleA1
+Arguments:
+    1) x-coordinate
+    2) y-coordinate
+    3) radius
+Returns:
+    Array
+Returns the object IDs of the bullets inside the given circle in an array.
+
+Inside the player script, it will only return enemy bullet IDs, and vice versa.
+
+
+GetShotIdInCircleA2
+Arguments:
+    1) x-coordinate 
+    2) y-coordinate 
+    3) radius 
+    4) target 
+Returns:
+    Array
+Returns the IDs of the bullets inside the given circle and corresponding to the target in an array.
+
+The target can be:
+
+TARGET_ALL
+TARGET_ENEMY
+TARGET_PLAYER
+
+GetShotCount
+Arguments:
+    1) target
+Returns:
+    Integer
+Returns the number of bullets that exist from the given target.
+
+The target can be:
+
+TARGET_ALL
+TARGET_ENEMY
+TARGET_PLAYER
+
+SetShotAutoDeleteClip
+Arguments:
+    1) left boundary (default 64)
+    2) top boundary (default 64)
+    3) right boundary (default 64)
+    4) bottom boundary (default 64)
+Sets at what point the bullet will be automatically deleted when leaving the STG screen.
+
+To override this auto deletion, use ObjShot_SetAutoDelete on the bullet you want to prevent from auto deleting.
+
+GetShotDataInfoA1
+Arguments:
+    1) graphic id
+    2) target
+        TARGET_PLAYER
+        TARGET_ENEMY
+    3) info type
+        INFO_RECT             : Coordinate rect list.
+                                Returns real array: [left, top, right, bottom]
+        INFO_DELAY_COLOR      : Delay color RGB list.
+                                Returns real array: [red, green, blue]
+        INFO_BLEND            : Blending type.
+                                Returns real. can be BLEND_ALPHA, BLEND_ADD_RGB, or BLEND_ADD_ARGB
+        INFO_COLLISION        : Radius of collision detection.
+                                Returns real
+        INFO_COLLISION_LIST   : List of collision hitbox radii and coordinates.
+                                Returns real two-dimensional array: [radius, x, y]
+Return Value
+    value array based on info type
+Returns information depending on the information requested.
+
+StartShotScript
+Arguments:
+    1) script path
+Starts a shot script.
+
+Category: Danmakufu ph3
+Navigation menu
+Create accountLog inPageDiscussionReadView sourceView history
+
+Search
+Go
+Main page
+Recent changes
+FAQ
+IRC channel
+Communities
+Links
+Danmakufu Ph3
+About
+Functions
+Tutorials
+Danmakufu 0.12m
+About
+Functions
+Tutorials
+Tools
+What links here
+Related changes
+Special pages
+Printable version
+Permanent link
+Page information
+This page was last modified on 19 April 2015, at 07:35.
+Privacy policyAbout Danmakufu WikiDisclaimersPowered by MediaWiki*/

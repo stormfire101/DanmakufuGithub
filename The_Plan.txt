@@ -1,0 +1,94 @@
+
+attack+attack/2 per week x
+learn how to work with angular velocity /
+get sprites and sprite sheets working x
+situational animations ie attack animation
+boss music
+sound affects
+put tails (curved lasers) on the ghost // need to learn how to use angular velocity
+visual affects ei exploding/expanding bullets
+backgrounds
+	nonspell
+	spell
+mees with the player script
+	change bullet spread
+	lower dps
+	fix the focus death glitch
+make a custom border ui
+	decide on a name for the bossfight
+
+Plan of attack
+nonspell 1- may rework
+nonspell 2-EXPLODING BULLETS give more warning to the EXPLODING BULLETS also the warning itself looks like it will kill the player may make this spell 1 due to the gimick
+spell 1 ghost (needs a tail) chases the player while they dodge coins may make it nonspell 2
+spell 2 a laser draws in bullets which the player has to dodge
+
+future gimicks
+	change the width of the screen which the player can move in
+	Boat....long story really it just goes across the screen and bullets trail it will need more sprites
+	ghost orbitals (will need tails)
+	
+	
+Done 1/11/2017
+	attack #5
+		//screen closes in on the player and they have to dodge a stream of bulets akin to the player
+		UI background
+			//was needed so the screen closeing in didnt leave a black box
+			//to do this I had to make custom system files 
+				//in terms of what changed I swap out the default img ui and made a task for a border to appear around the play area it even folows the play area as it shrinks
+			//created graphics for a background in the play area my goal is to find a away to when I render it basicaly use one of the layers as a cliping mask I'm out of ideas on how to do it tho
+			//the need for this is that I want each layer to move idavidually I may just use a cheaper simpler option using opacity and swaping out a part scrolling with just animating it using sprites
+	
+	new goals
+	
+	get sounds affects working
+	finish background
+	make 1-2 new attacks
+	refine old attacks
+	edit pause screen file//have the options be in english and possibly create a restart shortcut
+	visual affects
+	
+	
+	/*Notes Carl Jung freud Joseph campbell
+	
+	cross culturaul
+	hero tahiti2014
+	scapegoat
+	mark twain
+	henry david thoruea
+	emily dicksinon
+	edgar allan poe
+	James fenimore cooper
+	stephen crane
+	edith wharthop*/
+	
+1/18/2017
+		sort of finished the background never got the whole clipping mask to work but it doesnt break and looks decent
+		slight chnages to timing and health for all attacks
+		
+		goal 
+			attack animations
+			new attack
+				plan
+					sense the screen is already shrunk shortened or whatever I might as well use it for more attacks
+					however my plan with it is to have the screen slowly close in on the player until they have literally no space to dodge
+					given the amount of scrren space left I will need to make another attack the resets the screen size
+					fix the 3 spell when I change the screen size I made it so the charecters arent really affected but the players projectiles are
+					given that the next time I use that the boss will be attacking while the boss fires
+					
+					pattern
+						I have used far to many rng based patterns
+						now I have yet to use that many spirit based projectiles which the char I'm basing this boss on is known for
+						given that I plan to use or finally give the ghosts a tail
+						
+	
+1/23/2017
+	remade attack pattern for third spell
+		now uses sin or cos cant remember which to make a alternating wave to use for bullet placement they are then aimed thorugh progression of that sin or sos equation
+		also added exploding bullets to it
+		came up with a semi fix to placement issues when shrinking the stg frame
+			when I shrink th screen it changes each side by 6 so to keep a object in a relatively same spot I just -6 however for some reason it gets moved off this bad as there is a laser that is fired then more for just special affects and if you hug it that gittering can kill
+			also I plan to have a spell be that the boss attacks as the screen shrinks and use its constant closeing in as a timer for the player so I need a soloution
+			SOULOUtion sort of.. I tied the boss's and laser's x value to the middle of the screen keeping them in line with no gittering still a issue for the player and thir shots
+		used a visual affects library to show charing only in 3rd spell and 2 nonspell right now
+most of the same goals as last time are still in place at least every thing that has yet to be done.... also I have far to many files for the background....		

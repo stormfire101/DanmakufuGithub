@@ -1,0 +1,213 @@
+#TouhouDanmakufu[Single]
+#System["C:/Users/Matt/Documents/th_dnh_ph3/script/firstBoss/system/New_System.txt"]
+#Background["script/firstBoss/system/Default_Background_IceMountain.txt"]
+#ScriptVersion[3]
+#Title["nonspell1"]
+#Text["nonspell1"]
+#BGM["./necrofantasia.ogg"]
+#include "script/default_system/Default_ShotConst.txt"
+let objBoss;
+let objScene=GetEnemyBossSceneObjectID();
+let imgBoss = GetCurrentScriptDirectory ~ "./dot_komachi.png";
+let objBossState=0;
+@Event{
+    alternative(GetEventType())
+    case(EV_REQUEST_LIFE){
+        SetScriptResult(2200);
+    }
+    case(EV_REQUEST_TIMER){
+        SetScriptResult(40);
+    }
+    /*case(EV_REQUEST_SPELL_SCORE){
+        SetScriptResult(1000000);
+    }*/
+}
+@Initialize{
+    objBoss = ObjEnemy_Create(OBJ_ENEMY_BOSS);
+    ObjEnemy_Regist(objBoss);
+    ObjMove_SetDestAtFrame(objBoss, GetCenterX, 60, 60);
+    //ObjEnemyBossScene_StartSpell(objScene);
+    TDrawLoop;
+    TFinalize;
+    MainTask;
+}
+@MainLoop{
+    ObjEnemy_SetIntersectionCircleToShot(objBoss, ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 32); 
+    ObjEnemy_SetIntersectionCircleToPlayer(objBoss, ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 24);
+    yield;
+}
+task MainTask{
+	loop(20){
+    wait(120);
+	
+   let switch=1;
+  // movement();
+  //stateUp;
+  
+  let obj;
+  while(ObjMove_GetSpeed(objBoss)!=0){
+	ascent(i in 0..2){
+	  //let obj = CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 2, GetAngleToPlayer(objBoss),DS_FIRE_BLUE, 3); 
+		spiritTurn(evenOdd);
+		wait(rand(5,15));
+	}
+	  wait(25);
+  }
+  //if(hold==0){
+  movement();
+  //}
+  wait(10);
+	   coin;
+	   wait(10);
+	//wait(100);
+		//scythe(4,1);
+		yield;
+		
+    }
+}
+function stateUp{
+	if(ObjMove_GetSpeed(objBoss)!=0){
+		objBossState=1;
+	}else{
+		objBossState=0;
+	}
+}
+task coin{
+	let obj;
+	ascent(i in 0..4){
+		ascent(n in 0..4){
+			//CreateShotA1
+			obj = CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss),3,GetAngleToPlayer(objBoss)+((n-1.5)*8)+i*2,DS_COIN_RED+i,3); 
+		}
+		wait(8);
+	}
+}
+
+task scythe(size,dir){
+	let obj;
+	ascent(h in 0..size){
+		ascent(i in 0..(size-h)){
+			//let obj = CreateShotA1(ObjMove_GetX(objBoss)+(i*20+h*10)-((size*20)/2.5),ObjMove_GetY(objBoss)+(h*20)-((size*20)/2.5),0,90,DS_SCALE_A_RED,0);
+			
+		}
+	}
+	
+}
+ task spiritTurn(dir){
+	 let obj = CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 2, GetAngleToPlayer(objBoss),DS_FIRE_BLUE, 3); 
+	 let save = rand(0.6,2);
+	 let hold = 180*dir;
+	 ObjMove_AddPatternA4(obj,1,2,hold,0,0,ObjMove_GetSpeed(obj),GetPlayerObjectID(),NO_CHANGE);
+	 while((absolute(hold))-(absolute(save))>0){
+		wait(1);
+		
+		//ObjMove_AddPatternA4(obj,1,2,hold,0,turn,ObjMove_GetSpeed(obj),GetPlayerObjectID(),NO_CHANGE);
+		//hold=floor(hold-hold/10);
+				
+		ObjMove_AddPatternA4(obj,1,2,hold,0,0,ObjMove_GetSpeed(obj),GetPlayerObjectID(),NO_CHANGE);
+		hold-=save*dir;
+		//WriteLog((absolute(hold))-(absolute(save)));
+	 }
+	 ObjMove_AddPatternA4(obj,1,2,0,0,0,ObjMove_GetSpeed(obj),GetPlayerObjectID(),NO_CHANGE);
+	ascent(i in -1..3){
+		let spread = CreateShotA1(ObjMove_GetX(obj),ObjMove_GetY(obj),2,ObjMove_GetAngle(obj)+i*7,DS_FIRE_BLUE,0);
+	}
+	Obj_Delete(obj);
+    }
+	
+task movement{
+    while(ObjEnemy_GetInfo(objBoss, INFO_LIFE) > 0){
+		let x=rand(GetCenterX + 90, GetCenterX - 90);
+		let y= rand(GetCenterY - 60, GetCenterY - 120);
+		let hold=ObjPrim_Create(OBJ_SPRITE_2D());
+		ObjRender_SetX(hold,x);
+        ObjRender_SetY(hold,y);
+		ObjMove_SetDestAtFrame(objBoss,x,y,GetObjectDistance(objBoss,hold)/rand(1.5,2));
+        wait(240);
+    }
+}
+task TDrawLoop {		
+		//125 width	256 height
+		let animFrame = 0;
+let animFrame2 = 0;
+
+let dir;
+	let speed; 
+
+	// texture the boss, set centre as true centre.
+	ObjPrim_SetTexture(objBoss,imgBoss);
+	ObjSprite2D_SetSourceRect(objBoss,0,0,128,128);
+	ObjSprite2D_SetDestCenter(objBoss);
+	//ObjRender_SetScaleXYZ(objBoss,1.0,1.0,0);
+	
+	while(!Obj_IsDeleted(objBoss)) {
+	
+		// update boss speed/dir locally
+		dir = ObjMove_GetAngle(objBoss);
+		speed = ObjMove_GetSpeed(objBoss);
+		
+		// animation handling
+		//alternative(objBossState)
+		if(speed == 0){ 
+		//alternative(objBossState)
+		//case(0){
+			ObjRender_SetAngleXYZ(objBoss,0,0,0);
+			ObjSprite2D_SetSourceRect(objBoss,0,0,128,128);
+			if(animFrame < 15) { ObjSprite2D_SetSourceRect(objBoss,0,0,128,128);}
+			if(animFrame >= 15 && animFrame < 30) { ObjSprite2D_SetSourceRect(objBoss,0,128,128,128*2);}
+			if(animFrame >= 30 && animFrame < 45) { ObjSprite2D_SetSourceRect(objBoss,0,128*2,128,128*3);}
+			//if(animFrame >= 45) { ObjSprite2D_SetSourceRect(objBoss,0,128*3,128,128*4); WriteLog(4);}
+			animFrame2 = 0;
+		//}
+		}
+		else if(cos(dir) < 0){ 
+		WriteLog(1);
+			//ObjRender_SetAngleXYZ(objBoss,0,180,0);	// flip vertical
+			if(animFrame2 < 15) { ObjSprite2D_SetSourceRect(objBoss,128*3,128*3,128*4,128*4); }
+			if(animFrame2 >= 15 && animFrame2 <= 45) { ObjSprite2D_SetSourceRect(objBoss,128*3,128*4,128*4,128*5); }
+			//if(animFrame2 >= 30 && animFrame2 < 45) { ObjSprite2D_SetSourceRect(objBoss,128,64,192,128); }
+			//if(animFrame2 >= 45) { ObjSprite2D_SetSourceRect(objBoss,192,64,256,128); }
+		}
+		else if(cos(dir) > 0){ 
+		WriteLog(0);
+			ObjRender_SetAngleXYZ(objBoss,0,180,0);	// flip vertical
+			if(animFrame2 < 15) { ObjSprite2D_SetSourceRect(objBoss,128*3,128*3,128*4,128*4); }
+			if(animFrame2 >= 15 && animFrame2 <= 45) { ObjSprite2D_SetSourceRect(objBoss,128*3,128*4,128*4,128*5); }
+			//if(animFrame2 >= 30 && animFrame2 < 45) { ObjSprite2D_SetSourceRect(objBoss,128,128,192,192); }
+			//if(animFrame2 >= 45) { ObjSprite2D_SetSourceRect(objBoss,192,128,256,192); }  
+		}
+		animFrame++;		// count animFrame. (++ is +1)
+		animFrame2+=2;		// count animFrame2.
+		if(animFrame > 60) { animFrame = 0; }	// reset animFrame when it is higher than 60.
+		yield;
+	}
+}
+task TFinalize {
+    while(ObjEnemy_GetInfo(objBoss, INFO_LIFE) > 0){yield;}
+    if(ObjEnemyBossScene_GetInfo(objScene, INFO_PLAYER_SHOOTDOWN_COUNT)
+            +ObjEnemyBossScene_GetInfo(objScene, INFO_PLAYER_SPELL_COUNT) == 0){
+        AddScore(ObjEnemyBossScene_GetInfo(objScene, INFO_SPELL_SCORE));
+    }
+    Obj_Delete(objBoss);
+    DeleteShotAll(TYPE_ALL, TYPE_IMMEDIATE);
+    SetAutoDeleteObject(true);
+    CloseScript(GetOwnScriptID());
+    return;
+}
+function GetCenterX(){
+    return GetStgFrameWidth() / 2;
+}
+function GetCenterY(){
+    return GetStgFrameHeight() / 2;
+}
+function wait(n){
+    loop(n){yield;}
+}
+function evenOdd(){
+	let hold=rand(0,2);
+	if(hold<1){
+		return -1;
+	}else{
+		return 1
+	}
+}
