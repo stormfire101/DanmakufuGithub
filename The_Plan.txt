@@ -91,4 +91,15 @@ Done 1/11/2017
 			also I plan to have a spell be that the boss attacks as the screen shrinks and use its constant closeing in as a timer for the player so I need a soloution
 			SOULOUtion sort of.. I tied the boss's and laser's x value to the middle of the screen keeping them in line with no gittering still a issue for the player and thir shots
 		used a visual affects library to show charing only in 3rd spell and 2 nonspell right now
-most of the same goals as last time are still in place at least every thing that has yet to be done.... also I have far to many files for the background....		
+most of the same goals as last time are still in place at least every thing that has yet to be done.... also I have far to many files for the background....
+
+1/24/2017
+	remade the spell 2 still a wip
+		bullets now not heavilly aimed at the player or really at all
+			used co and sin one or the other to make a waving stream of bullets the come out from the bottom of the laser on both sides so left and right and the are pulled to the laser
+			set it up so there are no annoying sudden direction turns
+			theres a pair of bullets each not countting the ones on the opposite side one is purple the other blue
+			the blue bullets stop at the laser
+				I used objshotsetdelay to do this so i can keep its trajectory afterwards
+				the delay function hides a bullet weel at least its sprite... removes the hitbox and stops it as well as creating a aura of the bullets color
+				this is usally used to signal where bullets are going to come from in this case the aura will make the laser glow even more.

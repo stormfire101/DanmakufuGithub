@@ -6,6 +6,7 @@
 #Text["spell2"]
 #BGM["./necrofantasia.ogg"]
 #include "script/default_system/Default_ShotConst.txt"
+#include "script/Stellar FX/Stellar.dnh"
 let objBoss;
 let objScene=GetEnemyBossSceneObjectID();
 let imgBoss = GetCurrentScriptDirectory ~ "./dot_komachi.png";
@@ -13,6 +14,7 @@ let objBossState=0;
 let pos = ObjPrim_Create(OBJ_SPRITE_2D());
 let left;
 let right;
+let time;
 @Event{
     alternative(GetEventType())
     case(EV_REQUEST_LIFE){
@@ -40,14 +42,17 @@ let right;
     yield;
 }
 task MainTask{
-      wait(120);
-	  loop{
-	  sycthe;
-	  loop(10){
-		  yield;
-	  }
-	  wait(750);
-	  }
+	Stellar_Init();
+    wait(120);
+	loop{
+		Stellar_Charge(objBoss,20,0.2,BLEND_ALPHA,360);
+		wait(20);
+		sycthe;
+		loop(10){
+			yield;
+		}
+		wait(730);
+	}
 	  //spirit;
 	  //coin;
 	  //coinburst;
@@ -62,42 +67,72 @@ task sycthe{
 	
 	x=GetPlayerX();
 	y=GetScreenHeight();
-	CreateStraightLaserA1(x,y,(360-360/4),GetScreenHeight()+20,60,500,DS_BEAM_PURPLE,80);
+	CreateStraightLaserA1(x,y,(360-360/4),GetScreenHeight()+20,60,550,DS_BEAM_PURPLE,80);
 	ObjMove_SetDestAtFrame(obj,x,y,80);
 	wait(80);
-	spirit(x,y);
+	///spirit(x,y);
+	spiritb(x,y);
+	wait(10);
 	//wait(500);
-	//release;
+	release(x,y);
 	//CreateShotA1(x,y,1,180+45,DS_SCALE_A_WHITE,0);
 	
 }
-task release{
-	//loop(GetShotCount(TARGET_ALL-TARGET_PLAYER)){
-	//ObjMove_SetDestAtFrame(left,0,ObjMove_GetY(left),40);
-	//}
-}
-function spirit(x,y){//DS_BALL_BS_PURPLE  DS_BALL_S_PURPLE	
-	let time=0;
-	let dir=1;
-	let dirb=1;
-	let hold = GetStgFrameWidth()/2;
-	loop(3){
-	ascent(i in 0..15){
-		loop(2){
-			loop(2){
-				left = CreateShotA2(hold+hold*dir,GetPlayerY+(i^2)*dirb,0,0,0,1,DS_BALL_S_PURPLE,10);
-				ObjMove_SetDestAtFrame(left,x,ObjMove_GetY(left),40);
-				shoot(time,left,dir);
-				dirb=dirb*-1;
-			}
-		dir=dir*-1;
-		wait(5); time+=2;
+task release(x,y){
+	//DS_BALL_SS_PURPLE 460
+	loop(11){
+		ascent(i in 0..GetStgFrameHeight/40){
+			CreateShotA1(0,i*40,0.5,0,DS_BALL_SS_PURPLE,15);
+			CreateShotA1(GetStgFrameWidth,i*40,0.5,180,DS_BALL_SS_PURPLE,15);
 		}
+		wait(40);
 	}
-	wait(10); time+=5;
-	}
-	//ObjMove_SetDestAtFrame(left,0,ObjMove_GetY(left),40);
 }
+task spiritb(x,y){
+	//750
+	time=0;
+	ascent(i in 0..100){
+		 //CreateShotA2(x,GetScreenHeight,0,0,0,1,DS_BALL_S_PURPLE,10);
+		//let obj= CreateShotA1(x+5,GetStgFrameHeight,2,270+45+cos(i*17)*45/2,DS_BALL_S_PURPLE,10);
+		let obj= CreateShotA1(x+5,GetStgFrameHeight,2,270+50+cos(i*17)*30,DS_BALL_S_PURPLE,10);
+		//ObjMove_AddPatternB2(obj,0,2,NO_CHANGE,-0.015,0,-2,2);
+		ObjMove_AddPatternB2(obj,0,2,NO_CHANGE,-0.025+cos(i*8)*0.015,0,-2,2);
+		//ObjMove_AddPatternB2(obj,0,2,NO_CHANGE,-0.04,0,-2,2);
+		//ObjMove_AddPatternB1(obj,100+cos(i*20)*50,-2,NO_CHANGE);
+		
+		let left= CreateShotA1(x-5,GetStgFrameHeight,2,270-50+cos(i*17)*30,DS_BALL_S_PURPLE,10);
+		ObjMove_AddPatternB2(left,0,-2,NO_CHANGE,0.025+cos(i*8)*0.015,0,2,2);
+		//ObjMove_AddPatternB1(left,100+cos(i*20)*50,2,NO_CHANGE);
+		//wait(5);
+		red(x,y,1,i+1);
+		redl(x,y,-1,i+1);
+		wait(5);
+		time=time+5;
+		//i=i+1;
+	}
+	
+}
+task red(x,y,dir,i){
+	let obj= CreateShotA1(x+10*dir,GetStgFrameHeight,2,270+(50+cos(i*17)*30*dir),DS_BALL_S_BLUE,10);
+		//ObjMove_AddPatternB2(obj,0,2,NO_CHANGE,-0.015,0,-2,2);
+		ObjMove_AddPatternB2(obj,0,2*dir,NO_CHANGE,(-0.025*dir)+cos(i*8)*0.015,0,-2*dir,2);
+	while(ObjMove_GetX(obj)>x){yield;}
+	//ObjMove_SetSpeed(obj,0);
+	ObjShot_SetDelay(obj,500+rand(3,20)-time);
+	
+	//ObjMove_SetSpeed(obj,2.6);
+	}
+task redl(x,y,dir,i){
+	let obj= CreateShotA1(x+10*dir,GetStgFrameHeight,2,270+(50+cos(i*17)*30*dir),DS_BALL_S_BLUE,10);
+		//ObjMove_AddPatternB2(obj,0,2,NO_CHANGE,-0.015,0,-2,2);
+		ObjMove_AddPatternB2(obj,0,2*dir,NO_CHANGE,(-0.025*dir)+cos(i*8)*0.015,0,-2*dir,2);
+	while(ObjMove_GetX(obj)<x){yield;}
+	ObjShot_SetDelay(obj,520+rand(3,20)-time);
+	//ObjMove_SetSpeed(obj,0);
+	//while(time<500){yield;}
+	//ObjMove_SetSpeed(obj,2.6);
+}
+
 task shoot(time,obj,dir){
 	let hold = GetStgFrameWidth()/2;
 		wait(500-time-10);

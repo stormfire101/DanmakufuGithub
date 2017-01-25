@@ -23,7 +23,7 @@ let right = ObjPrim_Create(OBJ_SPRITE_2D());
 @Event{
     alternative(GetEventType())
     case(EV_REQUEST_LIFE){
-        SetScriptResult(6000);
+        SetScriptResult(7000);
     }
     case(EV_REQUEST_TIMER){
         SetScriptResult(60);
@@ -60,7 +60,7 @@ task MainTask{
 		
 		wait(130);
 	  //WriteLog(GetScreenWidth);156  296 140
-	  ascent( i in 0..22){//32, 16, 416, 464, 20, 80
+	  ascent( i in 0..21){//32, 16, 416, 464, 20, 80
 		  SetStgFrame(32+i*6,16, 416-i*6, 464, 20, 80);
 		  ObjMove_SetDestAtFrame(objBoss,GetCenterX,ObjMove_GetY(objBoss),1);
 		  ObjMove_SetDestAtFrame(obj,GetCenterX,ObjMove_GetY(objBoss),1);
