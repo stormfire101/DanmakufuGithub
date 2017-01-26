@@ -110,6 +110,7 @@ task coercion{
 task aim(){
 	let aim=GetAngleToPlayer(objBoss);
 	let obj=CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss),1.5,aim,DS_BALL_M_A_PURPLE,20);
+	Stellar_Emitter(obj,5000,0.9,1,0,0,10,10,10,2,BLEND_ALPHA+700,300,200);
 	
 	let hold=0;
 	//wait(20);

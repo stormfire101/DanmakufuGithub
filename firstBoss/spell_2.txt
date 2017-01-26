@@ -15,6 +15,7 @@ let pos = ObjPrim_Create(OBJ_SPRITE_2D());
 let left;
 let right;
 let time;
+let count=0;
 @Event{
     alternative(GetEventType())
     case(EV_REQUEST_LIFE){
@@ -44,14 +45,15 @@ let time;
 task MainTask{
 	Stellar_Init();
     wait(120);
+	//movement;
 	loop{
 		Stellar_Charge(objBoss,20,0.2,BLEND_ALPHA,360);
 		wait(20);
 		sycthe;
-		loop(10){
-			yield;
-		}
+		wait(10);
+		movement;
 		wait(730);
+		
 	}
 	  //spirit;
 	  //coin;
@@ -80,13 +82,33 @@ task sycthe{
 }
 task release(x,y){
 	//DS_BALL_SS_PURPLE 460
-	loop(11){
-		ascent(i in 0..GetStgFrameHeight/40){
-			CreateShotA1(0,i*40,0.5,0,DS_BALL_SS_PURPLE,15);
-			CreateShotA1(GetStgFrameWidth,i*40,0.5,180,DS_BALL_SS_PURPLE,15);
+	loop(3){
+		ascent(i in 0..50){
+			clumpl(x,y,i);
+			clumpr(x,y,i);
+			wait(2);
 		}
-		wait(40);
+		wait(5);
 	}
+	/*loop(6){
+		ascent(i in 0..GetStgFrameHeight/60){
+			CreateShotA1(0,i*60,1,0,DS_BALL_SS_PURPLE,15);
+			CreateShotA1(GetStgFrameWidth,i*60,1,180,DS_BALL_SS_PURPLE,15);
+		}wait(70);}*/
+}
+task clumpl(x,y,i){
+	let obj=CreateShotA1(0,cos(i*35)*(GetStgFrameHeight/2)+(GetStgFrameHeight/2),1.5,0,DS_BALL_BS_PURPLE,15);
+	ObjRender_SetBlendType(obj, BLEND_ALPHA);
+	ObjMove_SetDestAtSpeed(obj,GetStgFrameWidth,cos(i*35+20)*(GetStgFrameHeight/2)+(GetStgFrameHeight/2),1.5);
+	while(ObjMove_GetX(obj)<x){yield;}
+	Obj_Delete(obj);
+}
+task clumpr(x,y,i){
+	let obj=CreateShotA1(GetStgFrameWidth,-cos(i*35)*(GetStgFrameHeight/2)+(GetStgFrameHeight/2),1.5,0,DS_BALL_BS_PURPLE,15);
+	ObjRender_SetBlendType(obj, BLEND_ALPHA);
+	ObjMove_SetDestAtSpeed(obj,0,-cos(i*35+20)*(GetStgFrameHeight/2)+(GetStgFrameHeight/2),1.5);
+	while(ObjMove_GetX(obj)>x){yield;}
+	Obj_Delete(obj);
 }
 task spiritb(x,y){
 	//750
@@ -145,33 +167,31 @@ task shoot(time,obj,dir){
 		//ObjMove_SetSpeed(obj,2);
 }
 
-function simp(i){
-	if(i>=360){
-		return (i-360);
-	}else if(i<0){
-		return (i+360);
-	}else{
-		return i;
-	}
-}
-task track{
-	ObjMove_SetPosition(pos,GetPlayerX,GetPlayerY);
-	loop{
-		wait(15);
-		ObjMove_SetPosition(pos,GetPlayerX,GetPlayerY);
-		//ObjMove_SetPosition(pos,0,0);
-		ObjRender_SetPosition(pos,GetPlayerX,GetPlayerY,1);
-	}
-}
+
 task movement{
+	//let count=0; 730
     while(ObjEnemy_GetInfo(objBoss, INFO_LIFE) > 0){
-        let x=rand(GetCenterX + 90, GetCenterX - 90);
+		
+       /* let x=rand(GetCenterX + 90, GetCenterX - 90);
 		let y= rand(GetCenterY - 60, GetCenterY - 120);
 		let hold=ObjPrim_Create(OBJ_SPRITE_2D());
 		ObjRender_SetX(hold,x);
         ObjRender_SetY(hold,y);
-		ObjMove_SetDestAtFrame(objBoss,x,y,GetObjectDistance(objBoss,hold)/rand(1.5,2));
-        wait(240);
+		
+        wait(240);*/
+		wait(100);
+		loop(50){
+			let hold=ObjPrim_Create(OBJ_SPRITE_2D());
+			let x=cos(count)*100+192;
+			let y=sin(count)*30+90;
+			ObjRender_SetX(hold,x);
+			ObjRender_SetY(hold,y);
+			ObjMove_SetDestAtFrame(objBoss,x,y,GetObjectDistance(objBoss,hold)/2);
+			count=count+20;
+			//wait(GetObjectDistance(objBoss,hold)/2);
+			wait(12)
+			//yield;
+		}
     }
 }
 task TDrawLoop {

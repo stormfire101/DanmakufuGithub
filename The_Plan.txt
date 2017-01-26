@@ -103,3 +103,33 @@ most of the same goals as last time are still in place at least every thing that
 				I used objshotsetdelay to do this so i can keep its trajectory afterwards
 				the delay function hides a bullet weel at least its sprite... removes the hitbox and stops it as well as creating a aura of the bullets color
 				this is usally used to signal where bullets are going to come from in this case the aura will make the laser glow even more.
+1/25/2017
+	finished remaking spell 2 no really changes but there were some additions so i guess thats still a change
+		added bullets that come from the side and get destroyed on the laser
+			uses sin/cos placment and slight alternations to the equation to get a tragectory
+			its rather hard but I like it
+		add boss movement using what else but sin/cos... that stuff is really usefull for this
+			stops to charge and shot the laser
+				 really it stops so the particle affect for the chare doesnt go to a empty space...
+	Next target is spell 1 I want to finally add the tail for the ghost
+		I plan to revamp the genral pattern of the bullets that the player has to dodge
+			it already has a sort of second attack.. that being it shoots out a second string of bullets after a delay
+	plan
+		as of know I dont know theres a few to many easy path ways and I need to decide whether i give the boss movent wich will affect the bullet pattern
+		
+discoverd how to add or make after images in other words tails using stellar effects
+	I found it by inputing the wronng information int paremeters
+	it also uses very little processing power
+	the specific command was emitter
+		it seems to have at least with what I got a sort of firey or burning affect to it it does work for ghosts or spirits tho
+	I plan to apply it in most places with spirit type projectiles except for nonspell 2 and yes all those exploding bullets are spirits 
+	and sense I'm already running low on processing power in that attack as is I dont plan to add more visuall affects till I fix it
+		
+side note I really should make it clear what tasks or functions were added... I may do it but in case I dont finish that in time you may be able to just use a diff checker
+
+also sense I dont believe I ever really talked about my goal for this concerning difficulty and as of writing this I'm out of ideas on how to revamp attacks I might as well share my goal
+	sufice to say my hope is to make a bullet hell game based on the touhou franchise that series is known for its difficulty so dont expect the final product to be forgiving
+	I'm going to mostlikely make it only a boss fight later in the year I may make it into a whole stage
+		which would mean power progression non boss fodder enimies and a mid boss
+	as it stand I'm basing the boss off of a specific charecter and I'm basing her attacks on the gimmick she had in the games she has appeared in
+		the main ones of note are that she throw coins... LOTS of coins, controls spirits and can control length and distance
