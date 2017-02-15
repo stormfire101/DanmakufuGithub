@@ -133,3 +133,87 @@ also sense I dont believe I ever really talked about my goal for this concerning
 		which would mean power progression non boss fodder enimies and a mid boss
 	as it stand I'm basing the boss off of a specific charecter and I'm basing her attacks on the gimmick she had in the games she has appeared in
 		the main ones of note are that she throw coins... LOTS of coins, controls spirits and can control length and distance
+
+2/3/2017
+	updated nonspell2
+		this was the one with exploding bullets it had lag so I was looking to rework it to cut down what ever was casuing the lag I have yet to really find it
+		tho I have shortened the distance from the screen that a object can be before it is deleted this helped the frame rate there was also a large safe spot where the exploding bullets could not get to
+		I fixed that
+		I redid the basic spread as well as after 2 loops a sceond much denser spread that will likely go off once
+			considering when this fires the player will have to dodge them while the primed explosive bulletts (which can kill as well) are out so they will be a little stressed
+	updated	nonspell1
+		I did somethings with this... I have no clue what I am going to do with this attack really I plan to have the final be un aimed and not random the execption being the cureving splitting ghots bullets
+	Goal
+		finish reworking nonspell1
+			not aimed decent gaps between bullets boss doesnt move
+		start spell5
+			I have it as spell 5 cause I plan to make a spell 4 if this sort of test goes well
+				the test is that I want a spellcard where the walls close in on the play area but i cant mess with the stg frame to do this as it changes the cordanites
+				so I plan to make fake walls using sprites and give them a sort of collision so the player cant move through them... so they are technically walls I guess
+					I have to figure out the colision part when it comes to the sprite I plan to just take sections from the ui background to make it.
+		add sound affects
+			find a sound affect library I like that doesnt have static
+		mess with the pause screen files
+			change the options to english
+			add the 'r' restart keyboard shortcut
+		make more animations
+		adjust time on attacks and boss health for attacks
+			I want to get 2-3 cycles in for the bosses attacks I may speed them up to do this
+2/15/2017
+	created and finished spell 4
+		I found a way to make fake walls(its still part of the rendering area thats used for gameplay) using sprites taken from the ui background
+			the walls wil slowly close in on the player giving them less move to room
+			this happens as the boss is also attacking which is why this is deferent from spell 3
+				BUG-the player can clip into the walls for a second and are then pushed out I have yet to come up with a solution for this
+					I'm using 2 different meathods of stopping the players movement but neither worked perfectly
+					at the moment tho it allows the player a chance to survive if they are stuck between the edge of the screen and some bullets
+			through out the attack I have bullets in a wave like formation traveling down the screen to make the play area represent a river.. again
+				this uses a cos or sin that changes really quickly so as not to make it not random also the starting value is based on the players angle to the boss
+			I have two different coin based attacks in this which switch after a given amount of times
+				the  first one is a spread to cover the screen when it is still wide
+					this one isnt that wasnt that hard after I learned its pattern... tho it may take a while for the player to learn this
+				the second has coins bounce off the ever closing in walls
+					its the same angle but aimed at opposite walls so theres a decent amount of safe space
+					the main threat is that the player may waste time waiting for a set of those bullets to pass which can be deadly
+						I have yet to beat this without losing a life tho it is possible.. I just made to many mistakes when I was trying to beat it
+			I have more spirit bullets cause why not
+				they travel down screen in a fake random pattern why snaking from side to side there is a cap of how many can be on screen at once
+				when they first spawn a big one will appear this one is much lrger and slower(I had plans to use these more but do to limited screen space decided against it)
+					all the spirit bullets can push the coins which can either help the player by making semi safe spaces(you still have to deal with the spirit bullet)
+					or mess with them
+						I'm rather proud of my soloution for how exactly one would do this so if you want to find the lines of code quick 
+						here is somehing you can command F to get to them fast "spiritPush"
+				I also found ways to cut down how processor intensive the trails those bullets leave are
+	I did something else in another attack I think dont remember what.. you should be able to tell in github
+	Goals
+		sound
+			background music
+				likely going to "borrow" something just to test if I actually release this I plan to either make a bgm for it 
+				or get a ok from the artist of whatever song I decide would be a good fit
+			sound affects
+				the player script I'm using(which is not my own) has basic sounds for firing dieing and bomb(screen clears aka get out of jail free cards)
+				the death sound is needed to give good feed back so the player doesnt feel like they had a cheap death(I have learned this first hand through testing)
+				need to get sound affets for the boos firing bullets
+					sound affects needed
+						sound affects for coins two variation
+						sound affects for spirit bullets two variation
+						explosion sound affect for exploding bullets in non spell 2 and spell 3
+						ignition sound affect for exploding bullets in non spell 2
+						sound affect for exploding bullets stoping in spell 3
+						sound affect for river starting spell 3 and spell 4
+							possibly sound affects for bullets colliding in spell 4 may get annoying tho
+				will require a meathod for having sound affects play but not over lap to a horrible degree
+		remake nonspell 1
+			still not happy with it... dont have a plan for it right now
+				in the time bieng I may not include it in the bossfight ie the plural script
+		more visual affects or just visual improvements
+			rework the background a bit
+				I may try again to get the whole clipping mask thing to work
+		make nonspell 3 to go in between spell 3 and spell 4
+		fix player script
+			theres some bugs in the player script I'm using I would like to edit other aspects of that script as well
+		FAR OFF Goals
+			make this a stage
+				learn how to do stage scripts
+				make enemies and items (point items and power which raise player dps)
+				make lead up to boss

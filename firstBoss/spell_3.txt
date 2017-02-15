@@ -170,7 +170,7 @@ task Sanzu{
 					//hold=(round(rand(0,20)*7));
 					
 					//hold=(rand(0,10));
-					ascent(i in -2..3){
+					ascent(i in 0..3+2){
 						hold=cos((count+i*5)*4)*70+70;
 					let obj = CreateShotA2(hold,0,0,90,0,5,DS_SCALE_A_BLUE,5);
 					

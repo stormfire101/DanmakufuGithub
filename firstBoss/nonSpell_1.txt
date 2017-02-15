@@ -37,23 +37,37 @@ let objBossState=0;
     yield;
 }
 task MainTask{
-	loop(20){
     wait(120);
 	
-   let switch=1;
+   let dir=1;
   // movement();
   //stateUp;
   
   let obj;
-  while(ObjMove_GetSpeed(objBoss)!=0){
+ /* while(ObjMove_GetSpeed(objBoss)!=0){
 	ascent(i in 0..2){
 	  //let obj = CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 2, GetAngleToPlayer(objBoss),DS_FIRE_BLUE, 3); 
 		spiritTurn(evenOdd);
 		wait(rand(5,15));
 	}
 	  wait(25);
+  }*/
+  movement;
+  loop{
+	  ascent(i in 0..2){
+		  coin;
+		  wait(50);
+	  }
+	  wait(10);
+	  ascent(i in 0..2){
+		spiritTurn(dir);
+		dir*=-1;
+		wait(10);
+	  }
+	  wait(10);
+	  //yield;
   }
-  //if(hold==0){
+ /* //if(hold==0){
   movement();
   //}
   wait(10);
@@ -62,8 +76,8 @@ task MainTask{
 	//wait(100);
 		//scythe(4,1);
 		yield;
-		
-    }
+		*/
+    
 }
 function stateUp{
 	if(ObjMove_GetSpeed(objBoss)!=0){
@@ -74,13 +88,21 @@ function stateUp{
 }
 task coin{
 	let obj;
-	ascent(i in 0..4){
-		ascent(n in 0..4){
-			//CreateShotA1
-			obj = CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss),3,GetAngleToPlayer(objBoss)+((n-1.5)*8)+i*2,DS_COIN_RED+i,3); 
+	ascent(t in 0..2){
+		ascent(i in 0..5+t){
+			if(Obj_IsDeleted(objBoss)){return;}
+			ascent(n in 0..1+t){
+				ascent(o in 0..360/36){
+				//CreateShotA1
+					obj = CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss),1.6,GetAngleToPlayer(objBoss)+o*36+i*7+n*4.5,DS_COIN_YELLOW,10+n*10); 
+				}
+				//wait(n/2);
+			}
+			wait(3);
 		}
-		wait(8);
+		wait(6);
 	}
+	
 }
 
 task scythe(size,dir){
@@ -116,7 +138,8 @@ task scythe(size,dir){
     }
 	
 task movement{
-    while(ObjEnemy_GetInfo(objBoss, INFO_LIFE) > 0){
+	let count=0;
+   /* while(ObjEnemy_GetInfo(objBoss, INFO_LIFE) > 0){
 		let x=rand(GetCenterX + 90, GetCenterX - 90);
 		let y= rand(GetCenterY - 60, GetCenterY - 120);
 		let hold=ObjPrim_Create(OBJ_SPRITE_2D());
@@ -124,6 +147,29 @@ task movement{
         ObjRender_SetY(hold,y);
 		ObjMove_SetDestAtFrame(objBoss,x,y,GetObjectDistance(objBoss,hold)/rand(1.5,2));
         wait(240);
+    }*/
+	 while(ObjEnemy_GetInfo(objBoss, INFO_LIFE) > 0){
+		
+       /* let x=rand(GetCenterX + 90, GetCenterX - 90);
+		let y= rand(GetCenterY - 60, GetCenterY - 120);
+		let hold=ObjPrim_Create(OBJ_SPRITE_2D());
+		ObjRender_SetX(hold,x);
+        ObjRender_SetY(hold,y);
+		
+        wait(240);*/
+		wait(100);
+		loop(50){
+			let hold=ObjPrim_Create(OBJ_SPRITE_2D());
+			let x=cos(count)*100+192;
+			let y=sin(count)*30+90;
+			ObjRender_SetX(hold,x);
+			ObjRender_SetY(hold,y);
+			ObjMove_SetDestAtFrame(objBoss,x,y,GetObjectDistance(objBoss,hold)/2);
+			count=count+20;
+			//wait(GetObjectDistance(objBoss,hold)/2);
+			wait(12)
+			//yield;
+		}
     }
 }
 task TDrawLoop {		

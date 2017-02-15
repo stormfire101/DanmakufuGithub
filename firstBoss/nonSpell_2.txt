@@ -17,10 +17,10 @@ let animFrame = 0;
 @Event{
     alternative(GetEventType())
     case(EV_REQUEST_LIFE){
-        SetScriptResult(6000);
+        SetScriptResult(7000);
     }
     case(EV_REQUEST_TIMER){
-        SetScriptResult(40);
+        SetScriptResult(50);
     }
     /*case(EV_REQUEST_SPELL_SCORE){
         SetScriptResult(1000000);
@@ -44,22 +44,28 @@ task MainTask{
 	Stellar_Init();
 		
 	let dir=-1;
-	wait(120);
-	loop(20){
-		spirit;
+	//wait(120);
+	loop{
 		loop(2){
-			coin(dir);
-			dir=dir*-1;
-			wait(120);
+			wait(150);
+			spirit;
+			loop(2){
+				coin(dir);
+				dir=dir*-1;
+				wait(120);
+			}
 		}
-		wait(150);
+		wait(200);
+		preassure;
+		//yield;
+		
 	}
 	
 }
 task spirit{
 	attack;
 	wait(200);
-	Stellar_Charge(objBoss,20,0.5,BLEND_ALPHA,360);
+	//Stellar_Charge(objBoss,20,0.5,BLEND_ALPHA,360);
 	wait(40);
 	
 	//(absolute((90-(150-90))-150)/num
@@ -67,20 +73,22 @@ task spirit{
 	let num=5;
 	let holdb;
 	//let obj;
-	ascent(o in 0..6){
+	ascent(o in 0..7){
 		holdb=(absolute((90-(150-90))-150))/num;
-		ascent(i in 0..(num+1)){
+		ascent(i in 0..(num)){
 			shoot(num,hold,holdb,o,i);
+			//shootb(num,o,i);
 			//let obj=CreateShotA2(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), -1.5,(hold-i*holdb)-rand(0,(holdb/2))+180,+0.01-(o*0.0015)-rand(0,0.001),0,DS_BALL_BS_PURPLE, 3);
 		}
 		num=num+o*2;
 	}
 	
 }
+
 task shoot(num,hold,holdb,o,i){
 	let obj = CreateShotA2(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), -1.5,(hold-i*holdb)-rand(0,(holdb/2))+180,+0.01-(o*0.0015)-rand(0,0.001),0,DS_BALL_BS_PURPLE, 10);
 	wait(300);
-	if(Obj_IsDeleted(objBoss)){return;}
+	if(Obj_IsDeleted(objBoss) || Obj_IsDeleted(obj)){return;}
 	ObjMove_SetSpeed(obj,0);
 	let warn = ObjPrim_Create(OBJ_SPRITE_2D());
 	
@@ -89,14 +97,15 @@ task shoot(num,hold,holdb,o,i){
         ObjSprite2D_SetDestRect(warn, 0, 0, 62, 62);
         ObjRender_SetPosition(warn,ObjMove_GetX(obj),ObjMove_GetY(obj), 1); //move it to the top left corner of the screen
 		ObjSprite2D_SetDestCenter(warn);
-		ObjRender_SetBlendType(warn,BLEND_ADD_ARGB);
+		ObjRender_SetBlendType(warn,BLEND_ALPHA);
+		ObjRender_SetAlpha(warn,100);
 	
 	wait(110);
-	if(Obj_IsDeleted(objBoss)){return;}
+	if(Obj_IsDeleted(objBoss)||Obj_IsDeleted(obj)){Obj_Delete(warn);return;}
 	Obj_Delete(warn);
 	ObjMove_AddPatternA3(obj,0,0,0,0,0,0,DS_BALL_L_PURPLE);
 	//ObjSprite2D_SetDestRect(obj, 0, 0, 62, 62);
-	if(Obj_IsDeleted(objBoss)){return;}
+	//if(Obj_IsDeleted(objBoss)){return;}
 	wait(50);
 	//if(Obj_IsDeleted(objBoss)){return;}
 	Obj_Delete(obj);
@@ -110,28 +119,41 @@ function stateUp{
 		objBossState=0;
 	}
 }
-task coin(dir){
-	let hold;
-	if(dir==-1){
-		hold=150;
-	}else{
-		hold=0;
-	}
-	let i=150;
-	while(i>10){
-		moreCoins(i,dir,hold);
-		i=i-8;
-		//yield;
-		wait(6);
-		//if(Obj_IsDeleted(objBoss)){return;}
+task preassure{
+	ascent(i in 0..(190/7.6)/2){
+		shootPress(i);
+		wait(5);
 	}
 }
-task moreCoins(i,dir,hold){
+task shootPress(i){
+	let diff=1;
+	let hold = rand(0.2,0.6);
+	let holdb =GetAngleToPlayer(objBoss);
+	ascent(o in 0..5){
+		CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 1.6,(holdb+6)-i*7.8+o*(4+hold)+3*(o/5)^2,DS_COIN_ORANGE+(3+3*diff),5);
+		CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 1.6,(holdb-6)+i*7.8-o*(4+hold)-3*(o/5)^2,DS_COIN_YELLOW+(2.5-2.5*diff),5);
+		//CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 2.2,(90)-i*7.6-(o*(o-10)/2),DS_COIN_ORANGE,o*2.9);
+	diff=diff*-1;
+	wait(12.5-i/3.8);
+	}
+}
+task coin(dir){
+	ascent(i in 0..120/6){
+		moreCoins(i,dir);
+		
+		wait(6);
+	}
+}
+task moreCoins(i,dir){
 	ascent(o in -1..2){
-		CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 2,(hold+i*dir)+o*5*dir,DS_COIN_RED, 10);
+		//CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 2,(hold+i*dir)+o*5*dir,DS_COIN_RED, 0);
+		CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 2.4,(90+60*dir)-i*6*dir+o*5*dir,DS_COIN_ORANGE, 7.7);
+		CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 2.4,(90+60*(-dir))-i*6*(-dir)+o*5*(-dir),DS_COIN_YELLOW, 0);
+		if(Obj_IsDeleted(objBoss)){return;}
+		//CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 2,((150-hold)-i*dir)-o*5*dir,DS_COIN_YELLOW, 0);
 		//CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 2,i*dir,DS_COIN_YELLOW, 3);
 		wait(8);
-		if(Obj_IsDeleted(objBoss)){return;}
+		
 	}
 }
 

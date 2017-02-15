@@ -21,6 +21,7 @@ task TPlural{
     ObjEnemyBossScene_Add(obj, 0, dir ~ "./spell_1.txt");
     ObjEnemyBossScene_Add(obj, 0, dir ~ "./spell_2.txt");
     ObjEnemyBossScene_Add(obj, 0, dir ~ "./spell_3.txt");
+    ObjEnemyBossScene_Add(obj, 0, dir ~ "./spell_4.txt");
 
 	
     ObjEnemyBossScene_LoadInThread(obj);

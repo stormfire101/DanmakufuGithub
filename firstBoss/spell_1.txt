@@ -51,12 +51,14 @@ task MainTask{
 }
 task coin{
 	let hold=0;
-	let amount = 5;
+	//let amount = 5;
 	let num = 12;
 	let sec = 2.5;
+	
+	orbital();
 	loop{
 		loop(5){
-			ascent(o in 0..amount){
+			ascent(o in 0..5){
 				ascent(i in 0..360/num){
 					CreateShotA2(ObjMove_GetX(objBoss),ObjMove_GetY(objBoss),1,i*(360/num)+o*(360/num/sec)+hold,0,1,DS_COIN_YELLOW,10);
 				}
@@ -64,44 +66,82 @@ task coin{
 			}
 			hold+=20;
 		}
-		coinburst;
+		coinburst;//DS_BALL_M_PURPLE	
 		wait(100);
+	}
+}
+task orbital(){//460 230 25
+//WriteLog(GetStgFrameWidth);
+let count=0; 
+	loop{
+		let left = CreateShotA1(ObjMove_GetX(objBoss)-150, ObjMove_GetY(objBoss)-20, 0,GetAngleToPlayer(objBoss)+20,DS_BALL_M_PURPLE, 15);
+		//Stellar_Emitter(left,5000,0.8,1,0,0,4,7,10,2,690,300,250);
+		//Stellar_Emitter(left,5000,0.9,1,0,0,10,10,10,2,700,300,200);
+		let right = CreateShotA1(ObjMove_GetX(objBoss)+150, ObjMove_GetY(objBoss)-20, 0,GetAngleToPlayer(objBoss)+20,DS_BALL_M_PURPLE, 15);
+		//Stellar_Emitter(right,5000,0.8,1,0,0,4,7,10,2,690,300,250);
+		orbShot(left,right);
+		while(!(Obj_IsDeleted(left)&&Obj_IsDeleted(right))){
+		//ascent(count in 0..100){
+			ObjMove_SetDestAtFrame(left,cos(count*2.3)*35+80,cos(count*1.5)*20+40,15);
+			ObjMove_SetDestAtFrame(right,-cos(count*2.3)*35+304,cos(count*1.5)*20+40,15);
+			//ObjMove_SetPosition(left,cos(count*2.3)*35+80,cos(count*1.5)*20+40);
+			//ObjMove_SetPosition(right,cos(-count*2.3)*35+304,cos(count*1.5)*20+40);
+			wait(15);
+			count=count+20;
+		}
+		Obj_Delete(left);Obj_Delete(right);
+		wait(15);
+	}
+}
+task orbShot(left,right){
+	wait(5);
+	let count=0;
+	while(!(Obj_IsDeleted(left)&&Obj_IsDeleted(right))){
+		ascent(i in 0..90/18){
+			CreateShotA1(ObjMove_GetX(left), ObjMove_GetY(left), 1.4,(GetAngleToPlayer(left))+i*6-11+cos(count*5)*10,DS_COIN_ORANGE, 10+((i-2.5)/3)^2*5+1);
+			CreateShotA1(ObjMove_GetX(right), ObjMove_GetY(right), 1.4,(GetAngleToPlayer(right))+i*6-11-cos(count*5)*10,DS_COIN_ORANGE, 10+((i-2.5)/3)^2*5+1);
+			//wait(((x-2.5)/7)^2*5+1);
+		}
+		wait(35);
+		count++;
 	}
 }
 task coinburst{
 	let hold =360;
 	let num =12;
-	let amount=9;
+	//let amount=9;
 	let sec= 4;
-	ascent(o in 0..amount){
+	ascent(o in 0..9){
 		ascent(i in 0..360/num){
 			CreateShotA2(ObjMove_GetX(objBoss),ObjMove_GetY(objBoss),1,i*(hold/num)+o*(hold/num/sec),0,1,DS_COIN_YELLOW,10);
 			CreateShotA2(ObjMove_GetX(objBoss),ObjMove_GetY(objBoss),2,i*(hold/num)+(o*(hold/num/sec)*-1),-0.01,1,DS_COIN_WHITE,30);
 		}
-		wait(15);
+		wait(15); 
 	}
 }
 function spirit{
-	track;
+	//track;
 	follow();
 }
-task follow(){// Stellar_Emitter(object1,time2,scale3,speed4,firepitch5,fireyaw6,spread7,life8,numperframe9,blending,hue,saturation,alpha)
+task follow(){// Stellar_Emitter(object1,time2,scale3,speed4,firepitch5,fireyaw6,spread7,life8,numperframe9,blending10,hue11,saturation12,alpha13)
 	loop{
-		let obj = CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 2,GetAngleToPlayer(objBoss)+20,DS_BALL_M_WHITE, 10);
+		let obj = CreateShotA1(ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 2,GetAngleToPlayer(objBoss)+20,DS_BALL_M_PURPLE, 10);
 		ObjMove_SetPosition(pos,GetPlayerX,GetPlayerY);
-		ObjRender_SetPosition(pos,GetPlayerX,GetPlayerY,1);
+		//ObjRender_SetPosition(pos,GetPlayerX,GetPlayerY,1);
+		let wvel = 2;
+
+		//Stellar_Emitter(obj,5000,0.9,1,0,0,10,10,2,2,BLEND_ALPHA+700,300,200);
+		//Stellar_Emitter(obj,5000,0.9,1,0,0,13,10,10,2,720,300,200);
+		Stellar_Emitter(obj,5000,0.9,1,0,0,10,10,10,2,700,300,200);
 		
-		Stellar_Emitter(obj,5000,0.9,1,0,0,10,10,10,2,BLEND_ALPHA+700,300,200);
 		while(!Obj_IsDeleted(obj)){
-			//ObjMove_SetDestAtWeight(obj,ObjRender_GetX(pos),ObjRender_GetY(pos),1,1.5);
-			//snake(obj,GetAngleToPlayer(obj));
-			let wvel = 2;
-			//loop(2){
-				ObjMove_AddPatternA2(obj, 0, 2.2, GetAngleToPlayer(obj), 0, wvel, 1.3);
+			
+				ObjMove_AddPatternA2(obj, 0, 1.6, GetAngleToPlayer(obj), 0, wvel, 1.3);
+				
 				wait(15);
 				wvel*=-1;
 				//Stellar_Aura(obj,15,2,2,5,BLEND_ALPHA,700,300);
-				wait(10);
+				wait(15);
 			//}
 			
 			//wait(5);
