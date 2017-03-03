@@ -57,11 +57,7 @@ task MainTask{
 		wait(730);
 		dir=dir*-1;
 	}
-	  //spirit;
-	  //coin;
-	  //coinburst;
-	  //scytheSt;
-   // movement;
+	
  
 }
 task sycthe(dir){
@@ -148,7 +144,7 @@ task spiritb(x,y,dir){
 		red(x,y,1*dir,i+1);
 		redl(x,y,-1*dir,i+1);
 		wait(5);
-		time=time+5;
+		time=time+5;//
 		//i=i+1;
 	}
 	

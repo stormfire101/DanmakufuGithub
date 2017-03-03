@@ -75,9 +75,13 @@ task orbital(){//460 230 25
 let count=0; 
 	loop{
 		let left = CreateShotA1(ObjMove_GetX(objBoss)-150, ObjMove_GetY(objBoss)-20, 0,GetAngleToPlayer(objBoss)+20,DS_BALL_M_PURPLE, 15);
-		//Stellar_Emitter(left,5000,0.8,1,0,0,4,7,10,2,690,300,250);
-		//Stellar_Emitter(left,5000,0.9,1,0,0,10,10,10,2,700,300,200);
+		//Stellar_Emitter(left,5000,0.8,0.5,5,5,0.1,7,5,2,700,300,150);
+					Stellar_Emitter(left,5000,0.8,0.5,0,0,0.1,7,5,2,630,300,150);
+		//Stellar_Emitter(left,5000,0.8,1,10,10,0.1,7,1,2,630,300,150);
 		let right = CreateShotA1(ObjMove_GetX(objBoss)+150, ObjMove_GetY(objBoss)-20, 0,GetAngleToPlayer(objBoss)+20,DS_BALL_M_PURPLE, 15);
+		//Stellar_Emitter(right,5000,0.8,0.5,0,0,0.1,7,5,2,700,300,150);
+					Stellar_Emitter(right,5000,0.8,0.5,0,0,0.1,7,5,2,630,300,150);
+		//Stellar_Emitter(right,5000,0.8,1,10,10,0.1,7,1,2,630,300,150);
 		//Stellar_Emitter(right,5000,0.8,1,0,0,4,7,10,2,690,300,250);
 		orbShot(left,right);
 		while(!(Obj_IsDeleted(left)&&Obj_IsDeleted(right))){
@@ -132,7 +136,9 @@ task follow(){// Stellar_Emitter(object1,time2,scale3,speed4,firepitch5,fireyaw6
 
 		//Stellar_Emitter(obj,5000,0.9,1,0,0,10,10,2,2,BLEND_ALPHA+700,300,200);
 		//Stellar_Emitter(obj,5000,0.9,1,0,0,13,10,10,2,720,300,200);
-		Stellar_Emitter(obj,5000,0.9,1,0,0,10,10,10,2,700,300,200);
+		//Stellar_Emitter(obj,5000,0.9,1,0,0,10,10,10,2,700,300,200);
+		Stellar_Emitter(obj,5000,0.8,0.5,5,5,0.1,7,5,2,620,300,150);
+
 		
 		while(!Obj_IsDeleted(obj)){
 			

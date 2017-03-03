@@ -2,8 +2,8 @@
 #System["C:/Users/Matt/Documents/th_dnh_ph3/script/firstBoss/system/New_System.txt"]
 #Background["script/firstBoss/system/Default_Background_IceMountain.txt"]
 #ScriptVersion[3]
-#Title["spell4"]
-#Text["spell4"]
+#Title["test"]
+#Text["test"]
 #BGM["./necrofantasia.ogg"]
 #include "script/default_system/Default_ShotConst.txt"
 #include "script/Stellar FX/Stellar.dnh"
@@ -35,7 +35,7 @@ let par;
 @Initialize{
     objBoss = ObjEnemy_Create(OBJ_ENEMY_BOSS);
     ObjEnemy_Regist(objBoss);
-    ObjMove_SetDestAtFrame(objBoss, GetCenterX, 60, 60);
+    ObjMove_SetDestAtFrame(objBoss, GetCenterX, 100, 60);
     ObjEnemyBossScene_StartSpell(objScene);
     TDrawLoop;
     TFinalize;
@@ -48,111 +48,25 @@ let par;
 }
 task MainTask{
 	SetPlayerLife(4);
-	//fire;
+	Stellar_Init();
+	wait(120);
+	fire;
 	//SetStgFrame(32,16, 416, 464, 20, 80);
-      wait(120);//100 
-		Stellar_Init();
-		//32, 16, 416, 464, 20, 80
-		//SetStgFrame(32,16, 416, 464, 20, 80);
-		walls;
-		wait(5);
-		coins;
-		river;
-		
+      //100 
+	
 		
 }
 task fire{// Stellar_Emitter(object1,time2,scale3,speed4,firepitch5,fireyaw6,spread7,life8,numperframe9,blending10,hue11,saturation12,alpha13)
 	let count=0;let life=0;
+	ObjMove_AddPatternA2(objBoss,0,1.5,90,0,1.5,2);
 	//loop{
-		
-		//Stellar_Emitter(objBoss,1,1.8,2,0,0,sin(count/2)^2*40+10,cos(count/2)^2*8+3+life,3,2,705,300,150);
 		Stellar_Emitter(objBoss,2000,1.4,2,100,100,3,25,3,2,630,300,150);
-				//Stellar_Emitter(objBoss,1,10,0.5,0,0,1,1,5,2,700,300,150);
+				//Stellar_Emitter(objBoss,1,10,0.5,0,0,1,1,5,2,700,700,150);
 
-		yield; count++;
-	//}
-}
-task coins{
-	let aim;
-	let hold;
-	let count=0;
-	let size;
-	let dir=1;
-	let col;
-	//loop{
-		hold=8;
-		wait(30);
-		loop(10){
-			size=110/hold;			
-			ascent(o in 0..4){
-				//size=90/(hold-o);
-				if(o==1||o==2){col=5;}else{col=0;}
-				ascent(i in 0..100/size){
-					let obj = CreateShotA2(GetCenterX,ObjMove_GetY(objBoss),(2/3)*o,90-41*dir+i*size*dir+o*2.3*dir,(2/3)/2,2,DS_COIN_YELLOW+col,i*2.7*o);
-					//Obj_SetValue(obj,1,2);
-				}
-				wait(5+o*2);
-			}
-			wait(43);
-			size=85/6;
-			ascent(i in 0..85/size){
-				let obj = CreateShotA2(GetCenterX,ObjMove_GetY(objBoss),2,90+45*dir-i*(size-2)*dir,0.01,2.5,DS_COIN_ORANGE,0);
-				//ObjRender_SetColorHSV(obj,NO_CHANGE,NO_CHANGE,200);
-				//Obj_SetValue(obj,1,2);
-			}
-			dir=dir*-1;
-			
-		}
-		
-		loop(10){
-			loop(6){
-			size=38/2;
-			ascent(i in 0..38/size){
-				loop(2){
-					let obj=CreateShotA1(GetCenterX,ObjMove_GetY(objBoss),1.7,90+21*dir+i*size*dir,DS_COIN_YELLOW,2);
-					coin(obj);
-					dir=dir*-1;
-				}
-				yield;
-			}
-			wait(10);
-			/*size=70/2/3;
-			//ascent(o in 0..6){
-				ascent(i in 0..70/2/size){
-					loop(2){
-						let obj=CreateShotA1(GetCenterX,ObjMove_GetY(objBoss),1.65,90+i*size*dir+cos(count*30.3)*10,DS_COIN_YELLOW,0);
-						coin(obj);
-					}
-					dir=dir*-1;
-					//wait(2);
-				}
-				//wait(5);
-			//}*/
-			wait(20);
-			count++;
-			}
-			
-			wait(50);
-		}
-		
-		let obj = CreateShotA1(GetCenterX,ObjMove_GetY(objBoss),2,100,DS_COIN_ORANGE,0);
-		//ObjMove_GetSpeed	ObjMove_GetAngle
-		ObjMove_AddPatternB1(obj,10,ObjMove_GetSpeed(obj)*cos(ObjMove_GetAngle(obj)),ObjMove_GetSpeed(obj)*sin(ObjMove_GetAngle(obj)));
+		wait(8); count++;
+	///}
 }
 
-task coin(obj){
-	while(ObjMove_GetX(obj)<GetCenterX+(xwidth/2)&&
-		ObjMove_GetX(obj)>GetCenterX-(xwidth/2)){yield;}
-		ObjMove_AddPatternB1(obj,0,-ObjMove_GetSpeed(obj)*cos(ObjMove_GetAngle(obj)),ObjMove_GetSpeed(obj)*sin(ObjMove_GetAngle(obj)));
-		//ObjMove_AddPatternB1(obj,0,,NO_CHANGE);
-		//ObjMove_SetAngle(obj,ObjMove_GetAngle(obj)-90);
-}
-task river{
-	waveA;
-	//waveB;
-	wait(20);
-	spirits;
-}
 task spirits{
 	wait(70);
 	spirit(rand(0,5),sp,false);
@@ -191,15 +105,13 @@ task spirit(count,place,big){// Stellar_Emitter(object1,time2,scale3,speed4,fire
 		ObjRender_SetAlpha(obj,400);
 		Obj_SetValue(obj,1,2);
 		wait(55);
-		//Stellar_Emitter(obj,5000,2,0.5,0,0,0.1,18,2,2,700,300,150);
-		Stellar_Emitter(obj,5000,2,2,100,100,3,18,3,2,627,300,150);
+		Stellar_Emitter(obj,5000,2,0.5,0,0,0.1,18,2,2,700,300,150);
 		wvel = 1.6;
 		hold=1.4;
 		slow=43.75;
 	}else{
 		obj=CreateShotA1(cos(count*137.5)*(xwidth/2-75)+GetCenterX,0,1.5,aim,DS_BALL_M_A_PURPLE,20);
-		//Stellar_Emitter(obj,5000,0.8,0.5,5,5,0.1,7,5,2,700,300,150);
-		Stellar_Emitter(obj,5000,0.8,0.5,100,100,3,7,3,2,627,300,150);
+		Stellar_Emitter(obj,5000,0.8,0.5,5,5,0.1,7,5,2,700,300,150);
 		Obj_SetValue(obj,1,2);
 		wvel = 1.2;
 		hold=2.3;

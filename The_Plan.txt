@@ -217,3 +217,131 @@ also sense I dont believe I ever really talked about my goal for this concerning
 				learn how to do stage scripts
 				make enemies and items (point items and power which raise player dps)
 				make lead up to boss
+				
+				
+				off the record
+				american gov and lit
+2/27/2017
+	its been a while since I updated this so this may be loose
+	re colored and eidited the emitter effect
+		I think I finally figured out what pitch and yaw does... maybe
+			either way I found a use for it which is what matters
+				what it does is to allow the trail to more closely follow its target such as if it is goin in a circle as seen in the test script
+				I also just a color which has the same purple base but the edges are blue I think this is better fitting
+	trying to rework the river part of spell 3
+	Goals
+		nothing has changed except for well somethings were added
+			my goal for non spell 3 is to use orbitals that are actual enemies meaning they can be killed slowing down the amount of bullets that come your way
+				this would mean learning how to make and use enemy scripts
+				//which leads to the next part
+		as I stand I should be on track to turn this boss into a actual stage meaning that it will include 
+			enemies with their own bullet patterns
+			player power levels
+				the player can pick up power items that increas their dps and widen their shot spread
+					this would include working and editing player scripts
+			items in general
+				power items and score items
+					the point of collection
+						this enables the plaer to collect all items on screen by getting to a certain height on the screen
+						this may however already be built in
+			work on the stage background
+				not the spell background
+				this means likely learning how to work with the 3d graphic funtions
+					make a texture for it
+					create a mesh for it and obtain the values of its vertices
+					and work with the 3d camera
+			stage bgm and boss bgm
+				for now may just borrow them both
+			miniboss
+				may be a different char then the main boss likely will be
+				2-3 spells
+				2-3 non spells
+			dialouge
+				for mid boss and main boss
+			this also generally means learning how stage scripts actually work to begin with
+			stretch goal which I could reach is a difficulty setting
+				easy normal hard lunatic
+				at the moment most of the attacks are at a lunatic level of difficulty
+					and lowering the dif likely means cutting down bullet density as well as removing certain elemants to attacks and maybe changes to patterns
+					for some difficulties such as easy and normal I may just be able to remove the attacks that I cant simplify
+				//considering that if this gets shown in class I may have the teachers play this youre likey gonna want me to put this in
+					that being said I may just have you play lunatic anyways
+	Feuture plans
+	basically seior project
+		written part
+			I may try to make this into my senior project in some way
+				as I cant really sell this as it is a bit of a fan project of another series tho I can still release it
+				what I may do is make a tutorial or blogish thing
+					concerning the steps I went through to make this mostly concerning problem solving as well as the creative sort of process I used
+					this wont really be a step by step for learning the language as theere would likely be much better sources for this
+						 also writting down my think proces for this may also be helpfull to myself out side of the academic reasons
+		the whole prgraming thing
+			well aside from MAKING ABSOULUTELY SURE I BACK EVERYTHING UP MANY TIME considering how important this code is now
+			I would also need to do commenting and other nice things of that manner
+				STAGES
+					try to make more stages
+					in other words making this a full game
+					preferably with 6 stages and a extra stage which tends to have the hardest difficulty
+						meaning at the most 6 different chars not counting mid bosses
+						each main boss would likely have a similar amount of attacks on harder difficulties and more of a growing or exponetail amount on lower difficulties
+						also difficulty curve
+					PROBABILITY OF REACHING THIS
+						well making attacks in genral isnt that hard now that I have found as meathod for it
+						and most of the bosses will be based on their specific gimmicks and poweres
+						I came up with th base set of attacks in about a month (meaning I came up with half of the basic outline for half the attacks that I'm using now in about a week or 2)
+						with more exectution of these plans more bosses and attacks should get easier with time
+							my goal is to finish 2 to 2+1/2 bosses over the summer which may include balencing them
+							when I get to that point I will release a beta to get feed back
+							during my senior year finish the last 3 and extra stage
+							I will be writting the blogish/toutorial like thing throught
+						this will mean also making more art assests which since I need a art credit because for some bloddy reason graphic arts did give me one
+						I may look into getting that work counted as part of it
+							this would mean backgrounds 2 to 3 per stage depending on if the mid boss is a different char from the stage boss
+						sound assets
+							this may be pushing it so I may just borrow these
+							sound affects
+								most of these are shared bettween stages and bosses
+							bgms
+								2 to 3 per stage depending on if there is a different miniboss from the stage boss
+						sprites
+							bullets
+							player sprites
+							boss sprites
+							enemies
+							logo(I need this anyways)
+							stage intro display
+								a sort of img that ties in usally with the stage boss
+								just a sort of presentation thing
+								//ObjMove_AddPatternA2(obj1,0,360/170,GetAngleToPlayer(obj1)+GetAngleToPlayer(objBoss)-90,0,-360/(18*3.1415926535897932384626433832795*2),3);
+3/3/2017
+	reworked nonspell1
+		couldnt decide what to do for this for a while I needed to make it reasonably diificult so I could either leave it that way or tone it back when I add in different difficulties
+			To do this I wanted to instead of using a gimmick (wich wouldnt fit for a nonspell) I had to use some sort of a spread
+			issue is if the boos is the only point of origin for the bullets it can be quite boring 
+				now there are ways around this such as having the boss move and fire bullets whoes patterns protrude from the boss that however didnt really fit with this boss
+				So I decided to give the boss orbitals so there were bullets coming from different points of origin
+					the orbitals are of course ghosts as is the theme of this boss and as such have the partical effect I'm using for their tail or wake
+						to do this I had to learn how to work with angular velocity in this engine or really learn angular velocity in the first place
+							I went out to the great source of information google and came up with dividing 360 by the number of seconds or frame I wanted it to take to get the speed 
+								and used that to dived 360 again to get the angle it ould need to change which I think works
+							at the point of writting this I sort of understand it to the point where I can calculate out the values I need to have it orbit something
+							however since this is a ghost I had the bright idea of giving it a snaking path wich messed up most if not all of my calculations
+								I at some point got it to work with 4 orbs and brute forced it to move it in the correct position(so my values were likely off) but its orbit was stable
+								later I wanted to widen it and in the process of doing so decided to add another orb because I wanted to see how it would look
+									at this point when trying to calculate the angular velocity I basically just started guessing till it worked 
+									as since I decreassed its speed the snaking path had more time to affect it
+					I can scale the difficulty using the amount of these spirit orbitals present my plan is that there will be 3 on easy, 4 on normal, 5 on hard 
+						and lunatic may have 5 as well with a different firing interval and pattern
+							as it stand the current firing timing I'm using is set so that it does not stick to oneside of the ring, in othere words it alternate ssides 
+								tho since the bullets are spining they some times end in the same relative space I however slowed down the speed which solved this
+								I had a issue with this for a while as at one point the bullets tended to sync up leaving the player very little space and just looking ugly
+									I ended up marking the timer on a graph and came up with 
+										delay of when shot*bullet number+delay of when shot/2*time
+									which worked wonders
+							for the spread I wanted it aimed at the player with 3 different parts there is a delay so the angle will change as the orbs that is firing it is moving 
+								I decided on the first and second being odd so there is a bullet dircelty aimed at the player and the second being even
+		of course the boss cant just use the orbitals to attack so I have a basic cosine spread that isnt aimed at the player
+			I may instead use ^2so I can have it swing side to side but have a brief wait period in between with out needing to ust pi
+				this may even be put in this day
+	GOALS
+	 nothing has changed -finishing nonspell1
