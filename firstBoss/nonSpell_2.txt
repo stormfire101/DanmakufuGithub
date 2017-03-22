@@ -34,6 +34,7 @@ let animFrame = 0;
     TDrawLoop;
     TFinalize;
     MainTask;
+	BMarker;
 }
 @MainLoop{
     ObjEnemy_SetIntersectionCircleToShot(objBoss, ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 32); 
@@ -277,4 +278,55 @@ function evenOdd(){
 	}else{
 		return 1
 	}
+}
+task BMarker()
+{
+	//let hold=GetEnemyBossSceneObjectID();
+	let path = GetCurrentScriptDirectory() ~ "system/img/Bmarker.png";
+		let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+		//ObjRender_SetBlendType(obj, BLEND_ALPHA);
+		Obj_SetRenderPriority(obj, 0.98);
+		ObjPrim_SetTexture(obj, path);
+		ObjSprite2D_SetSourceRect(obj, 0, 0, 160, 183);
+		ObjSprite2D_SetDestCenter(obj);
+		ObjRender_SetScaleXYZ(obj,0.4,0.4,0);
+		
+	let pathb = GetCurrentScriptDirectory() ~ "system/img/Bwheel.png";
+		let objb = ObjPrim_Create(OBJ_SPRITE_2D);
+		//ObjRender_SetBlendType(obj, BLEND_ALPHA);
+		Obj_SetRenderPriority(objb, 0.027);
+		ObjPrim_SetTexture(objb, pathb);
+		ObjSprite2D_SetSourceRect(objb, 0, 0, 108, 109);
+		ObjSprite2D_SetDestCenter(objb);
+		//ObjSprite2D_SetDestRect(objb, 0, 0, 108/(160/67), 109/(160/67));		
+		//ObjRender_SetScaleXYZ(objb,67/108,67/109,0);
+		ObjRender_SetScaleXYZ(objb,0.4,0.4,0);
+		
+	let pathc = GetCurrentScriptDirectory() ~ "system/img/highlight.png";
+		let objc = ObjPrim_Create(OBJ_SPRITE_2D);
+		//ObjRender_SetBlendType(obj, BLEND_ALPHA);
+		Obj_SetRenderPriority(objc, 0.024);
+		ObjPrim_SetTexture(objc, pathc);
+		ObjSprite2D_SetSourceRect(objc, 0, 0, 250, 231);
+		ObjSprite2D_SetDestCenter(objc);
+		//ObjSprite2D_SetDestRect(objb, 0, 0, 108/(160/67), 109/(160/67));		
+		//ObjRender_SetScaleXYZ(objb,67/108,67/109,0);
+		ObjRender_SetScaleXYZ(objc,0.4,0.4,0);
+		ObjRender_SetBlendType(objc,BLEND_ALPHA);
+		ObjRender_SetAlpha(objc,100);
+		
+		let count=0;
+		loop{
+			//hold=GetEnemyBossSceneObjectID();
+			ObjRender_SetAngleXYZ(objb,0,0,ObjMove_GetY(GetPlayerObjectID)*1.4+count*1.5);
+			ObjRender_SetPosition(obj,ObjMove_GetX(objBoss)+(160*0.4)/2,GetStgFrameHeight+25, 2);
+			ObjRender_SetPosition(objb,ObjMove_GetX(objBoss)+(160*0.4)/2,GetStgFrameHeight+13, 2);
+			ObjRender_SetPosition(objc,ObjMove_GetX(objBoss)+(160*0.4)/2,GetStgFrameHeight+13, 2);
+			
+			if(ObjMove_GetX(GetPlayerObjectID)>ObjMove_GetX(objBoss)-35&&ObjMove_GetX(GetPlayerObjectID)<ObjMove_GetX(objBoss)+35){
+				ObjRender_SetAlpha(objc,200);count=count+2;ObjRender_SetScaleXYZ(objc,0.8,0.8,0);
+			}else{ObjRender_SetAlpha(objc,100);}
+			ObjRender_SetScaleXYZ(objc,0.4,0.4,0);
+			yield;
+		}
 }

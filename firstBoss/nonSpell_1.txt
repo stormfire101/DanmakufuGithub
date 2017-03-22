@@ -34,6 +34,7 @@ let open =true;
     TDrawLoop;
     TFinalize;
     MainTask;
+	BMarker();
 }
 @MainLoop{
     ObjEnemy_SetIntersectionCircleToShot(objBoss, ObjMove_GetX(objBoss), ObjMove_GetY(objBoss), 32); 
@@ -42,6 +43,7 @@ let open =true;
 }
 task MainTask{
 	Stellar_Init();
+	//check;
     wait(100);
 	bossPlzWork;
 	orbitals;
@@ -51,7 +53,67 @@ task MainTask{
 	//CreateShotA2(ObjMove_GetX(objBoss),ObjMove_GetY(objBoss),3,GetAngleToPlayer(objBoss)0,4,DS_BALL_M_PURPLE,15);
 	//
 }
-
+task check(obj){
+	while(!Obj_IsDeleted(obj)){
+	if(ObjEnemyBossScene_GetInfo(GetEnemyBossSceneObjectID,INFO_CURRENT_LIFE)<1){
+		//yield;
+		Obj_Delete(obj);
+	}
+	
+	yield;
+	}
+}
+task BMarker()
+{
+	//let hold=GetEnemyBossSceneObjectID();
+	let path = GetCurrentScriptDirectory() ~ "system/img/Bmarker.png";
+		let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+		//ObjRender_SetBlendType(obj, BLEND_ALPHA);
+		Obj_SetRenderPriority(obj, 0.98);
+		ObjPrim_SetTexture(obj, path);
+		ObjSprite2D_SetSourceRect(obj, 0, 0, 160, 183);
+		ObjSprite2D_SetDestCenter(obj);
+		ObjRender_SetScaleXYZ(obj,0.4,0.4,0);
+		
+	let pathb = GetCurrentScriptDirectory() ~ "system/img/Bwheel.png";
+		let objb = ObjPrim_Create(OBJ_SPRITE_2D);
+		//ObjRender_SetBlendType(obj, BLEND_ALPHA);
+		Obj_SetRenderPriority(objb, 0.027);
+		ObjPrim_SetTexture(objb, pathb);
+		ObjSprite2D_SetSourceRect(objb, 0, 0, 108, 109);
+		ObjSprite2D_SetDestCenter(objb);
+		//ObjSprite2D_SetDestRect(objb, 0, 0, 108/(160/67), 109/(160/67));		
+		//ObjRender_SetScaleXYZ(objb,67/108,67/109,0);
+		ObjRender_SetScaleXYZ(objb,0.4,0.4,0);
+		
+	let pathc = GetCurrentScriptDirectory() ~ "system/img/highlight.png";
+		let objc = ObjPrim_Create(OBJ_SPRITE_2D);
+		//ObjRender_SetBlendType(obj, BLEND_ALPHA);
+		Obj_SetRenderPriority(objc, 0.024);
+		ObjPrim_SetTexture(objc, pathc);
+		ObjSprite2D_SetSourceRect(objc, 0, 0, 250, 231);
+		ObjSprite2D_SetDestCenter(objc);
+		//ObjSprite2D_SetDestRect(objb, 0, 0, 108/(160/67), 109/(160/67));		
+		//ObjRender_SetScaleXYZ(objb,67/108,67/109,0);
+		ObjRender_SetScaleXYZ(objc,0.4,0.4,0);
+		ObjRender_SetBlendType(objc,BLEND_ALPHA);
+		ObjRender_SetAlpha(objc,100);
+		
+		let count=0;
+		loop{
+			//hold=GetEnemyBossSceneObjectID();
+			ObjRender_SetAngleXYZ(objb,0,0,ObjMove_GetY(GetPlayerObjectID)*1.4+count*1.5);
+			ObjRender_SetPosition(obj,ObjMove_GetX(objBoss)+(160*0.4)/2,GetStgFrameHeight+25, 2);
+			ObjRender_SetPosition(objb,ObjMove_GetX(objBoss)+(160*0.4)/2,GetStgFrameHeight+13, 2);
+			ObjRender_SetPosition(objc,ObjMove_GetX(objBoss)+(160*0.4)/2,GetStgFrameHeight+13, 2);
+			
+			if(ObjMove_GetX(GetPlayerObjectID)>ObjMove_GetX(objBoss)-35&&ObjMove_GetX(GetPlayerObjectID)<ObjMove_GetX(objBoss)+35){
+				ObjRender_SetAlpha(objc,200);count=count+2;ObjRender_SetScaleXYZ(objc,0.8,0.8,0);
+			}else{ObjRender_SetAlpha(objc,100);}
+			ObjRender_SetScaleXYZ(objc,0.4,0.4,0);
+			yield;
+		}
+}
 task orbitals{
 	loop{
 		//wait(20);
@@ -61,7 +123,7 @@ task orbitals{
 			ascent(i in 0..5){
 				orbital(i); 
 				WriteLog(42.000);
-				wait(29);
+				wait(31);
 			}
 		
 		}
@@ -72,7 +134,7 @@ task orbitals{
 	//orbital(2);
 }
 task orbital(hold){
-	wait(14*hold);
+	wait(12*hold);
 		//let obj1 = CreateShotA1(ObjMove_GetX(objBoss)-28*2, ObjMove_GetY(objBoss), 0,GetAngleToPlayer(objBoss)+20,DS_BALL_M_PURPLE, 15);
 	let obj1 = CreateShotA1(ObjMove_GetX(objBoss)-28-4, ObjMove_GetY(objBoss)+28+6, 0,GetAngleToPlayer(objBoss)+20,DS_BALL_M_PURPLE, 15);
 	let dir=11;
@@ -85,12 +147,13 @@ task orbital(hold){
 		//ObjMove_AddPatternA2(obj1,0,360/170,90,0,-360/(r*3.1415926535897932384626433832795*2),3);
 	ObjMove_AddPatternA2(obj1,0,360/200,90,0,-360/(r*3.1415926535897932384626433832795*2.4),3);
 	orbShoot(obj1,hold);
+	check(obj1);
 	loop{
 		//ObjMove_AddPatternA2(obj1,0,360/170,90,0,-360/(18*3.1415926535897932384626433832795*2)+dir,3);
 			//ObjMove_SetAngularVelocity(obj1,-360/(r*3.1415926535897932384626433832795*2)+dir);
 		ObjMove_SetAngularVelocity(obj1,-360/(r*3.1415926535897932384626433832795*2.4)+dir);
 		//yield;
-		wait(13);time=time+10;
+		wait(13);//time=time+10;
 		dir=dir*-1;
 		//save=obj1;
 		
@@ -135,29 +198,29 @@ task orbShoot(obj,hold){
 		}
 		//wait(hold*19);
 		coins(obj,hold);
-		wait((29/2)*5);
+		wait((31/2)*5);
 		//wait(10+hold*8.7);
 		
 	}
 }
 task coins(obj,hold){
-	let aim=GetAngleToPlayer(obj);
+	//let aim=GetAngleToPlayer(obj);
 	ascent(i in -1..2){
-			CreateShotA1(ObjMove_GetX(obj),ObjMove_GetY(obj),2.4,aim+i*21,DS_COIN_WHITE,4);
+			CreateShotA1(ObjMove_GetX(obj),ObjMove_GetY(obj),2.5,GetAngleToPlayer(obj)+i*21,DS_COIN_WHITE,4);
 		}
 		wait(10);
 		if(Obj_IsDeleted(obj)){
 			return;
 		}
 		ascent(i in 0..2){
-			CreateShotA1(ObjMove_GetX(obj),ObjMove_GetY(obj),2.6,aim+16/2-i*16,DS_COIN_ORANGE,4);
+			CreateShotA1(ObjMove_GetX(obj),ObjMove_GetY(obj),2.7,GetAngleToPlayer(obj)+16/2-i*16,DS_COIN_ORANGE,4);
 		}
 		wait(11);
 		if(Obj_IsDeleted(obj)){
 			return;
 		}
 		ascent(i in -2..3){
-			CreateShotA1(ObjMove_GetX(obj),ObjMove_GetY(obj),2.4,aim+i*15,DS_COIN_WHITE,4);
+			CreateShotA1(ObjMove_GetX(obj),ObjMove_GetY(obj),2.5,GetAngleToPlayer(obj)+i*15,DS_COIN_WHITE,4);
 		}
 		if(Obj_IsDeleted(obj)){
 			return;
@@ -290,6 +353,7 @@ task TFinalize {
             +ObjEnemyBossScene_GetInfo(objScene, INFO_PLAYER_SPELL_COUNT) == 0){
         AddScore(ObjEnemyBossScene_GetInfo(objScene, INFO_SPELL_SCORE));
     }
+	wait(5);
     Obj_Delete(objBoss);
     DeleteShotAll(TYPE_ALL, TYPE_IMMEDIATE);
     SetAutoDeleteObject(true);

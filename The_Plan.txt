@@ -345,3 +345,78 @@ also sense I dont believe I ever really talked about my goal for this concerning
 				this may even be put in this day
 	GOALS
 	 nothing has changed -finishing nonspell1
+		add a thing to show the position of the player and boss on the edge of a screen
+			each boss will have one with its own desing 
+		setup up the health bar so it goes up and down the screen on the side
+3/7/2017 LOG(log= not really a update its more for a feuture plan may seperate the two into different .txt files later)
+	as stated before I planned to flesh this out and make it a full game with multiple stages but I would need a story as that would decide the theme and which bosses the player faces
+		given that I'm already working on a komachi boss fight if I am to use a already existing storyline I would either need to adapt PoFV in which she is a boss and playbale char
+		or either soku or SWR
+			at this point I've decided to do soku and SWR, now the thing is these two games are fighting games as a result each playable char fights the other chars in a different order
+			so I'm going to have to get creative with difficulty scaling I'm thinking a sort of moving tier system however I will put in a sort of classic mode which will have the intended progression 
+			this will mean that I can make things look a bit more mechanical which could be fun to draws
+				as it stand each char will have their own story which really just means I need to right more dialouge
+3/14/2017
+	implemented tracker for boss and player
+		this makes it simpiler to follow the player which can be an issue for some
+		the boss marker is a common feature however given not nothing done simple and boring is worth anything I added a new part to it
+			it becomes animated with a aura and the gear that spins with movement
+	TESTING/PLAYING
+		at this point I can make it a good way through the boss and given that at some point I am going to add different difficulties 
+		so I need to make a account of my progress in beating my own creations
+			NonSpell 1
+				this card can be very difficult to learn the orbital shots are aimed so if the player stays calm and keeps the orb shots firing in the same direction it is much easier
+				there are some times where spreads of bullets overlap
+				TB(Times Beaten)2
+				TBB(times beaten with bombs (TBB really doesnt matter as no card should be made where you have to rely on bombs I include it cus I'm not the best at these games))2
+			nonspell 2
+				the randomness of the explosive bullets isnt that bad suprisingly as you can see where tis safe and where it isnt
+				the burst spread due to its timing can really trip you up it tends to catch you just as the explosions are dissapearing and there are select few spaces to 
+				pass through them
+					to increase the difficulty I can just change the timing and or alter the basic spread and burst spread
+					I likely wont change the spread of the explosive bullets
+				TB 6
+				TBB 5
+			spell 1
+				this one is also hard to learn as the tracking bullet moves weird tho if you learn it you can easily abuse it and usally if you wait around you can get trapped
+				the spread I'm using works well it makes a lot of what I might as well call gates wich the player has to manage wi=hile the annoying tracking bullet of death and pain follows you
+				if you learn the tracking bullet it really isnt that hard
+					to increas the difficulty I would change the spread from the boss and orbitals I wont change the tracking bullet
+				TB 4
+				TBB 7
+			spell 2
+				anything to do with curveing bullets is hard as their path isnt always obvious howver these ones go in a semi circle so the angle always changes by the same amount
+				however I do have a alternator that changes the y placement as well as that the bullets are delayed when they come out so they dont come out in a even line
+				which both gives the player space and can trip them up
+				the y alternating seperates them into groups of 3 and becomes evident a little bit after they are fired
+				when they reach the laser again thet release a small shard bullet... I mostly did this for visual affect howver it createsw a nice amount of density 
+					if I need to change the difficulty I would change or remove the shard bullets
+					I could also change how the alternating works or remove it and just have the whole thing move 
+				TB 2
+				TBB 4
+			spell 3
+				N/A going to remaking this so I wont write one for this
+			spell 4
+				this is really just hard if you dont pay attention
+				given what type of bullets the waves are you can easily which direction they are going in. when you dont you can be trapped between them and the coins
+				the ever increasing lack of screen space can be a issue at times but as you can slightly clip into it for a second it isnt that big of an issue
+				I havent tried to remove it because it can be a usefull tool when the screen gets smaller
+				the second part which happens when the screen gets small enough can also be hard to learn as the bullets also have a habit of traping you and as the walls are still changing
+				the bullet pattern changes as well
+				at this point this tends to be the hardest attack which is what I was hoping as I want it to be the last attack
+					to make it easier I would make the wave pattern more defined and change the bullets pattern in the second phase
+				TB 2
+				TBB 3
+	BUGS
+		markers/trackers break in spell 3
+		the trail affects leave something behind when running the script as a plural which is what the final output will be so I will need to fix it
+			I cant really figure this out... when the script ends it should simply just delete the shot obj that the effect is tied to however it leaves its self behind
+				this may be because it takes frame to dissapate given that I think the img is bassed on several layers
+				So I will give it the time but how... I will need to make sure that the boss has at least a little bit of life left but stop it from firing at that point
+					in that time I can manually delete all the shot objs so as to give it time to dissapate
+				still if I can find the place that controls the endings of scripts so as to allow it to finish
+	GOALS
+		if I havent noted that I finished them they still stand and need to be met
+		still need to remake spell 3
+			now because of the affirmentioned bug
+		make a nonspell 3

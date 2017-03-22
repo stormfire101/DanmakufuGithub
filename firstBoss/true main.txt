@@ -8,12 +8,14 @@
 @Event{
 }
 @Initialize{
+	SetPlayerLife(4);
     TPlural;
 }
 @MainLoop{
     yield;
 }
 task TPlural{
+	
     let dir = GetCurrentScriptDirectory();
     let obj = ObjEnemyBossScene_Create();
     ObjEnemyBossScene_Add(obj, 0, dir ~ "./nonSpell_1.txt");
@@ -21,6 +23,7 @@ task TPlural{
     ObjEnemyBossScene_Add(obj, 0, dir ~ "./spell_1.txt");
     ObjEnemyBossScene_Add(obj, 0, dir ~ "./spell_2.txt");
     ObjEnemyBossScene_Add(obj, 0, dir ~ "./spell_3.txt");
+	ObjEnemyBossScene_Add(obj, 0, dir ~ "./nonSpell_3.txt");
     ObjEnemyBossScene_Add(obj, 0, dir ~ "./spell_4.txt");
 
 	
@@ -31,6 +34,7 @@ task TPlural{
     }
     CloseScript(GetOwnScriptID());
 }
+
 /*
 Move Object Functions
 Functions used to control object movement. The AddPattern functions also serve as replacements for the CreateShotA system used in 0.12m.
