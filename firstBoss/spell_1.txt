@@ -7,6 +7,7 @@
 #BGM["./necrofantasia.ogg"]
 #include "script/default_system/Default_ShotConst.txt"
 #include "script/Stellar FX/Stellar.dnh"
+
 let objBoss;
 let objScene=GetEnemyBossSceneObjectID();
 let imgBoss = GetCurrentScriptDirectory ~ "./dot_komachi.png";

@@ -1,0 +1,46 @@
+#TouhouDanmakufu[Stage]
+	#ScriptVersion[3]
+	#Title["Komachi Stage"]
+	#Text["Komachi Stage"]
+	#System["C:/Users/Matt/Documents/th_dnh_ph3/script/firstBoss/system/New_System.txt"]
+	#Image["./system/img/onozuka_komachi_touhou_drawn_by_tsuruia.jpg"]
+	#Background["script/firstBoss/system/Default_Background_IceMountain.txt"]
+
+	@Initialize
+	{
+		TStage();
+	}
+
+	@MainLoop
+	{
+		yield;
+	}
+
+	@Finalize
+	{
+	}
+
+
+	task TStage
+	{
+		let dir = GetCurrentScriptDirectory();
+
+		//Creates the boss
+		let path = dir ~ "true main.txt";
+		let idScript = LoadScriptInThread(path);
+		loop(60){yield;}//Assuming that compiling with finish in about a second.
+		StartScript(idScript);
+
+		//Stands by until the boss scene is finished
+		while(!IsCloseScript(idScript))
+		{
+			yield;
+		}
+
+		//???Creating the enemy, or looping the creation of an enemy
+
+		loop(240){yield;}
+
+	    //End of the stage
+		CloseStgScene();
+	}

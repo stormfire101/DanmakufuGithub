@@ -420,3 +420,119 @@ also sense I dont believe I ever really talked about my goal for this concerning
 		still need to remake spell 3
 			now because of the affirmentioned bug
 		make a nonspell 3
+3/22/2017
+	chsnges
+		spell 3
+			A rework of the origanal
+			now uses fake sprite walls which fixed the bugs surrounding the old walls
+			pattern
+				Base
+				the walls close in to a set distance at the start
+				curving bullets descend down the screen while bouncing of the walls
+					they come in from both sides at the top
+						the result is that it seems to form a 3d sort of structure a pipe
+						I have taken steps to make it as apperant as possible via having a section be a differnt color and changing the opacity if it is supposed to look farther away
+				Spec
+					I added exploding spirit bullets tht travel down screen in a snkaing pattern aimed at the player
+						I used a scale function to make the bullets sprites expand even more than normal
+							I as a result had to make a expanded hitbox for it which it has to constantly check
+						I showed to hitbox for where the trigger is for the bullet to explode tho it will explode if it touches the bottom
+							when it does explode it does let out buttles that are aimed
+								they have a habit of sniping the player if they dont pay attention
+		the tubular base spread has a lot of safe spaces tho some can get cut off when it crosses the edges are scary and  deadly
+		and you want to hug the walls to abuse the aim of the spirit bullets but you cant
+		you need to move constantly to evade the exploding bulltes
+		nonspell 3
+			New
+			first use of Enemy objects
+				of course they are ghost or spirits... really I just wanted the player to be able to kill them
+				because of that I dont really need to give them a sprite all they use is a bullet sprite and emitter effects
+					shows when the player when they are hitting them with a delay so its not just blinking so fast the player cant tell
+						I use a stronger emitter on a short timer with a differnt color to show damage
+					I also gave it a death animation which I need to make for each one(auto deleteing upon h<0 health isnt built in but can be done easily)
+			Pattern
+				a spread of spirit enemies that once it gets close enough to the player changes its aim to the spot the player was at.. it does this twice
+					it will only launch 5 and will only launch if there are at most 2 spirit enemies already on screen they will die if the hit the edge of the screen
+					they fire bullets as they travel
+						the bullets travel faster then they which tends to create a dense space of bullets
+				the boss fires a rather basic spread
+	Goals
+	//well the boss fight is pretty much done barring sound affects and some animations which I can fix easilly so now I need to make this into a stge script
+		learn how to make a stage script
+			where does the bossfight plural fit in how do I handle the sections before that are full of fodder enemies
+			miniboss?
+		everything else lest I have finished it in this is still left
+		//side not on sound affects and animations
+			I have not implemented these yet because as they would be tied to the attacks themselves I wanted to smooth them out first so they played well
+			I mean I could have set it up in the test script I have but I would have needed to learn how to use it in a decent setting ie a actual attack
+			given how I plan to create the fairy objcets I could fit in any sound affect calls I need into them so that will likely be the first thing 
+			aside from learning how stage scripts work
+3/23/2017
+	customized the pause screen files options now in english
+		goal
+		find a way to show what boss stage and attack you are paused on
+			likely using script events to call to the system script or try to use common data
+3/24/2017
+	I think I found a way to work with stage scripts... well implementaion of the plural scripts wasent an issue to begin with
+	the problem was I needed to find way to have the lead up to the boss or mini boss as a seperate script to help me keep my sanity 
+	this would also allow me to have code to create enemies in a seperate script
+		as it stands I am using a single script but have removed the boss... at least I think I have the player script I'm using who's shots are homming to the boss 
+		and they are going to 0,0 it might just be because it has no target I may just make a fake boss but have it out off range of the homming as it doesnt activate if it isnt close enough
+			the main thing is that the ending of the script isnt tied to the boss's health
+		with the fact that I'm making a long section that isnt a spell I have reallowed the nonspell background and its in 3d so it causes fram stuttering due to lag
+			so I will likely change the geometry and texture
+	I will need to make more common or reasonable ghost sprites not the mess of emitters
+	for the background I will base it either on higan(a vast field of flowers with some hills I will also maybe need some sky.. 
+	or just fog, lots of fog either way I need something to hide how 3d backgrounds work)the other option would be to base it on a stage from soku that is teid to komachi
+		but that would have trees which would be annoying to make and kill frames
+	also I want to change the spawn positions of some bullets so they dont spawn on the boss thankfully non of them are based heavilly on timing so it should be easy
+	GOALS
+		3d background
+			learn how the mesh and vetex system works
+			find a good texture
+		slight spawning edit to some attacks
+			less bullets spawning directly on the boss
+				no one wants coins to fly out directly from their face
+	side note if there is one thing I have learned when trying to read other people scripts to learn how to structure it, its that I hate reading other peoples code 
+	baring when decent practices are followed such as tasks or fuctions have reasonable names that make sense
+3/29/2017
+	Changes
+		all in the nonspell background and stage script
+			background
+				found a water texture and made a texture for the land
+				scrolling and updating added
+					it wont be a constant loop through out the stage
+	I have made a system to render 3 tiles for the background and have scrolling by moving the camera and when it would get to the end reseting it and updating the tiles
+	this is rather cluncky both when it comes to adding more and the hit it does to the frame which mind you is minimal
+		so I will split tile sections being that I can easily put in extra sprites and other affects
+	The plan is to split it between 3-4 sections not counting the wall of fog which will be a transition for one
+		part 1
+			eagle eye view high above the ground to the point you can see mountains which make up the valley
+				simgular tile for land and river... well the water part. also a path, dock or small town
+				mountains likely not a 3d mesh as the player wornt see the backside instead sprites at a angle
+				clouds need to give the feeling of depth
+			5 fairies/3 ghosts
+			transition zoom in or the player flies downward use clouds to cover the tile change
+		part 1.5
+			sperate parts for water and land
+			still in the valley so the river is a little small 
+			no transition really needed tho the land might drop a bit to show it and the camer will tilt up a bit
+		part 2
+			but it doesnt last long at which point the river widens
+			red spider lilies start appearing 
+			some areas of land are mostly gravel
+			2 faries/6 ghosts
+			one or two docks
+			maybe a lamp or something
+			Transition: wall of fog. due to the camera change you can see it coming a few lights in the fog for atmosphere 
+				only a few ghosts go through here they wont attack the player unless on lunatic
+		part 3
+			in higan so red spider lilies are much more prevelant
+			the water is tinted either red or purple some lights in the water
+			a new coloered section of land that is supposed to look like there are more flower sprites than there actually are
+			maybe a slight change in music
+			only ghosts now
+			Transition lamps start appearing on the side of the river until you see the boss and or her boat in the fog
+		Boss
+			camera is more top down so it should only have to render 2 tiles
+			aside from that nothing should change

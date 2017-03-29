@@ -7,6 +7,7 @@
 #BGM["./necrofantasia.ogg"]
 #include "script/default_system/Default_ShotConst.txt"
 #include "script/Stellar FX/Stellar.dnh"
+
 let objBoss;
 let objScene=GetEnemyBossSceneObjectID();
 let imgBoss = GetCurrentScriptDirectory ~ "./dot_komachi.png";
@@ -44,15 +45,38 @@ let total=0;
 }
 task MainTask{
 	Stellar_Init();
-	wait(100);
+	wait(90);
 	
 	//ObjMove_SetDestAtFrame(fodder, GetCenterX+100, 100, 60);	
 	spirits;
+	Bshoot;
+}
+task Bshoot{
+	let a=180;
+	let dir=1;
+	let t=10;
+	//let ahold;
+	//let r=50;
+	while(ObjEnemy_GetInfo(objBoss,INFO_LIFE)>0){
+		ascent(n in 0..2){
+			ascent(i in 0..t){
+				//ahold=(a/2)*dir+i*(a/9)*dir;
+				CreateShotA1(ObjMove_GetX(objBoss)-(t*5/2+5)*dir+i*5*dir,ObjMove_GetY(objBoss)+5,1.7,90-(a/2)*dir+i*(a/t)*dir+(a/t)/2*dir*n,DS_COIN_YELLOW,2+(t-i));
+				//CreateShotA1(ObjMove_GetX(objBoss)+(sin(ahold)*r)/sin(90),ObjMove_GetY(objBoss)+(sin(180-ahold-90)*r)/sin(90),1.6,GetAngleToPlayer(objBoss),DS_SCALE_PURPLE,5);
+
+			}
+			//yield;
+			wait(18);
+			
+		}
+		wait(2);
+		dir=dir*-1;
+	}
 }
 task spirits{
 	let dir=1;let sdir=1;
 	loop{
-		wait(180);
+		wait(120);
 		if(total<=2){
 			ascent(i in 0..5){
 				if(total<=7){
@@ -70,13 +94,15 @@ task spirits{
 task Eshoot(obj,dir){
 	yield;
 	while(ObjEnemy_GetInfo(obj,INFO_LIFE)>0){
-		ascent(a in 0..8){
+		ascent(a in 0..16){
 			ascent(i in 0..4){
+				if(ObjEnemy_GetInfo(obj,INFO_LIFE)<=0){return;}
 				CreateShotA1(ObjMove_GetX(obj),ObjMove_GetY(obj),1.6,ObjMove_GetAngle(obj)+i*(360/4)*dir,DS_SCALE_PURPLE,5);//DS_NEEDLE_BLUE
-				if(Obj_IsDeleted(obj)){return;}
+				
 				yield;
 			}
-			CreateShotA1(ObjMove_GetX(obj),ObjMove_GetY(obj),1.4,ObjMove_GetAngle(obj)+a*(360/8)*dir,DS_NEEDLE_BLUE,7);
+			if(ObjEnemy_GetInfo(obj,INFO_LIFE)<=0){return;}
+			CreateShotA1(ObjMove_GetX(obj),ObjMove_GetY(obj),1.4,ObjMove_GetAngle(obj)+a*(360/16)*dir,DS_NEEDLE_BLUE,7);
 			wait(15);
 			
 		}
